@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
@@ -11,12 +11,12 @@ namespace wyyybbb.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class VinylController : ControllerBase
+    public class SpojProdavnicaPlocaController : ControllerBase
     {
         
         public VinylContext Context { get; set; }
 
-        public VinylController(VinylContext context)
+        public SpojProdavnicaPlocaController(VinylContext context)
         {
             Context = context;
         }
@@ -30,12 +30,6 @@ namespace wyyybbb.Controllers
         // [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
         /////////////////////////////////////////////GET////////////////////////////////////////////////////////////////
-        [Route("Preuzmi")]
-        [HttpGet]
-        public ActionResult PreuzmiPlochu()
-        {
-            return Ok(Context.Ploce);
-        }
 
 
         // [Route("PreuzmiLepo")]
@@ -74,68 +68,81 @@ namespace wyyybbb.Controllers
         //     // }
         // }
 
-        [Route("PrikaziPesme/{Ime}/{ImeIzvodjaca}/{PrezimeIzvodjaca}")]
-        [HttpGet]
-        public async Task<ActionResult> PreuzmiPesme(string ImePloce, string ImeIzvodjaca, string PrezimeIzvodjaca)
-        {
-             var vinyl = await Context.Ploce
-                    .Include(p => p.izvodjac)
-                    .Where(p => p.Ime == ImePloce &&
-                    p.izvodjac.Ime == ImeIzvodjaca &&
-                    p.izvodjac.Prezime == PrezimeIzvodjaca).FirstOrDefaultAsync();
-
-            if (vinyl != null)
-                return Ok(vinyl.Pesme);
-            else
-                return BadRequest("Nije pronadjena ploca!");
-
-            // catch (Exception e)
-            // {
-
-            //     return BadRequest(e.Message);
-            // }
-        }
-
-
+        
         // //////////////////////////////////////////////POST////////////////////////////////////////////////
 
-        // [Route("DodajPlocu")]
-        // [HttpPost]
-        // public async Task<ActionResult> DodajPlocu([FromBody] Vinyl vinyl) //cela ploca!!
-        // {
-        //     if (string.IsNullOrWhiteSpace(vinyl.Ime) || vinyl.Ime.Length > 50)//bar jedan karakter
-        //     {
-        //         return BadRequest("Pogrešno ime!");
-        //     }
+        [Route("DodajPlocu/{nazivProdavnice}/{nazivPloce}/{izvodjac}/{godinastampanja}/{zanr}/{pesme}/{izdavackaKuca}/{cena}")]
+        [HttpPost]
+        public async Task<ActionResult> DodajPlocu([FromRoute]string nazivProdavnice, string nazivPloce, string izvodjac, int godinastampanja, Zanr zanr, string pesme, string izdavackaKuca, int cena) //cela ploca!!
+        {
+            if (string.IsNullOrWhiteSpace(nazivProdavnice) || nazivProdavnice.Length > 50)//bar jedan karakter
+            {
+                return BadRequest("Pogrešno ime prodavnica!");
+            }
 
-        //     if (vinyl.GodinaStampanja < 1930 || vinyl.GodinaStampanja > 2022)
-        //     {
-        //         return BadRequest("Uneti validnu godinu štampanja ploče!");
-        //     }
+            if (string.IsNullOrWhiteSpace(nazivPloce) || nazivPloce.Length > 50)//bar jedan karakter
+            {
+                return BadRequest("Pogrešno ime prodavnica!");
+            }
 
-        //     if (string.IsNullOrWhiteSpace(vinyl.Pesme))
-        //     {
-        //         return BadRequest("Niste uneli pesme!");
-        //     }
+            if (godinastampanja < 1930 || godinastampanja > 2022)
+            {
+                return BadRequest("Uneti validnu godinu štampanja ploče!");
+            }
 
-        //     if (!Enum.IsDefined(typeof(Zanr), vinyl.Zanr))
-        //     {
-        //         return BadRequest("Uneti validan zanr ploče.");
-        //     }
+            if (string.IsNullOrWhiteSpace(pesme))
+            {
+                return BadRequest("Niste uneli pesme!");
+            }
 
 
+            var prodavnica = await Context.Prodavnice
+            .Where(p=> p.Naziv == nazivProdavnice)
+            // .Select(p=>p.ID)
+            .FirstOrDefaultAsync();
 
-        //     try
-        //     {
-        //         Context.Ploce.Add(vinyl); //ne zove bazu sad
-        //         await Context.SaveChangesAsync(); //nego ovde i apdejtuje model, prekopirace u bazu, validan id, u pozadini JavaScripta
-        //         return Ok($"Ploča je dodata sa ID: {vinyl.ID}"); //mora da se upise ID, vraca Task(int)
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         return BadRequest(e.Message);
-        //     }
-        // }
+            if(prodavnica==null)
+            return BadRequest("Nije nadjena prodavnica");
+
+            var i = await Context.Izvodjaci
+            .Where(p=> p.Ime == izvodjac)
+            // .Select(p=>p.ID)
+            .FirstOrDefaultAsync();
+
+            var iz = await Context.IzdavackeKuce
+            .Where(p=> p.Ime == izdavackaKuca)
+            // .Select(p=>p.ID)
+            .FirstOrDefaultAsync();
+
+            try
+            {
+                var Vinyl=new Vinyl{
+                Ime=nazivPloce,
+                Zanr=zanr,
+                GodinaStampanja=godinastampanja,
+                izvodjac=i,
+                izdavackaKuca=iz,
+                Pesme=pesme
+                };
+                Context.Ploce.Add(Vinyl);
+                await Context.SaveChangesAsync();
+
+                var spoj = new SpojProdavnicaPloca{
+                    Cena=cena,
+                    Kolicina=1,
+                    ploca=Vinyl,
+                    prodavnica=prodavnica
+                };
+                Context.ProdavnicaPloca.Add(spoj);
+                await Context.SaveChangesAsync();
+             return Ok("Ploča je dodata!!!!!!!!!!!!!"); 
+                
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
 
         // [EnableCors("CORS")]
@@ -264,71 +271,6 @@ namespace wyyybbb.Controllers
         // }
         ////////////////////////////////////////////////////PUT///////////////////////////////////////////////////
 
-        [Route("PromenitiVinyl/{ime}/{godinaStampanja}")] //posebne podatke da promenimo
-        [HttpPut]
-        public async Task<ActionResult> Promeni(string ime, int godinaStampanja)
-        {
-            if (godinaStampanja < 1931 || godinaStampanja > 2022)
-            {
-                return BadRequest("Pogrešna godina štampanja!");
-            }
-            if (ime.Length > 50)
-            {
-                return BadRequest("Ime ploče ne valja.");
-            }
-            try
-            {
-                var vinyl = Context.Ploce.Where(p => p.Ime == ime).FirstOrDefault();
-                //vratiti prvog koji zadovoljava uslove ili null ako ne postoji
-                //var zakljuci sam
-                //var zamenjuje bilo koji tip
-
-                if (vinyl != null)
-                {
-                    vinyl.GodinaStampanja = godinaStampanja;//trazi po godini stampanja
-                    vinyl.Ime = ime;
-
-                    await Context.SaveChangesAsync(); //salju se promene u bazu podataka
-                    return Ok($"Uspešno promenjena ploča! ID: {vinyl.ID}");
-                }
-                else
-                {
-                    return BadRequest("Ploča nije pronađena!");
-                }
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
-        [Route("PromenaFromBody")]
-        [HttpPut]
-        public async Task<ActionResult> PromeniBody([FromBody] Vinyl vinyl)
-        {
-            if (vinyl.ID <= 0) //posalje se i ID
-            {
-                return BadRequest("Pogrešan ID!");
-            }
-
-            // ... Ostale provere (Indeks, Ime, Prezime)
-
-            try
-            {
-                // var plocaZaPromenu = await Context.Ploce.FindAsync(vinyl.ID); //vrata student u slucaju da postoji ID koji smo prosledili, prihvata primarni kljuc od vise razlicitih vrednosti 
-                // plocaZaPromenu.Ime = vinyl.Ime;
-                // plocaZaPromenu.GodinaStampanja = vinyl.GodinaStampanja;
-
-                Context.Ploce.Update(vinyl); //ovo je druga opcija i prosledi se sam student, mora da bude ispravan ID!
-
-                await Context.SaveChangesAsync();
-                return Ok($"Ploca sa ID: {vinyl.ID} je uspešno izmenjena!"); //{studentZaPromenu.ID}
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
         ////////////////////////////////////////////////DELETE/////////////////////////////////////////////////
 
         [Route("IzbrisatiPlocu/{id}")] //UVEK SAVETUJE 

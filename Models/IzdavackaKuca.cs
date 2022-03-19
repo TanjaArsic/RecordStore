@@ -15,10 +15,6 @@ namespace Models
         [MaxLength(50)]
         public string Ime { get; set; }
 
-        public int GodinaNastanka { get; set;  }
-
-        public int PIB { get; set; }
-
         [MaxLength(100)]
         public string Website { get; set; }
 

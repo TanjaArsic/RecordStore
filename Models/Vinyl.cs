@@ -7,11 +7,11 @@ using System;
 
 namespace Models
 {
-    public enum TipVinyl
-    {   
-        Nova,
-        Polovna
-    }
+    // public enum TipVinyl
+    // {   
+    //     Nova,
+    //     Polovna
+    // }
     
     [Table("Vinyl")]
      public class Vinyl
@@ -23,13 +23,13 @@ namespace Models
         [MaxLength(50)]
         public string Ime { get; set; }
        
-        public TipVinyl Tip { get; set; }
 
         public Zanr Zanr{ get; set; }
 
-        public string Pesme { get; set; }
+        public string Pesme { get; set; } // 1.Time 2.Money 
          
         public int GodinaStampanja { get; set;  }
+
 
         [JsonIgnore]
         public Izvodjac izvodjac { get; set; }
@@ -38,6 +38,6 @@ namespace Models
         public IzdavackaKuca izdavackaKuca { get; set; }
 
         [JsonIgnore]
-        public Prodavnica prodavnica { get; set; }
+        public List<SpojProdavnicaPloca> prodavnica { get; set; }
     }
 }

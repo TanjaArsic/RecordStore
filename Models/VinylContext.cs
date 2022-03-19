@@ -11,6 +11,7 @@ namespace Models
         public DbSet<Prodavac> Prodavci { get; set; }
         public DbSet<Prodavnica> Prodavnice { get; set; }
         public DbSet<Vinyl> Ploce { get; set; }
+        public DbSet<SpojProdavnicaPloca> ProdavnicaPloca {get; set;}
 
         //konstruktor
         public VinylContext(DbContextOptions options) : base(options)

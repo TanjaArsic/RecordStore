@@ -22,13 +22,12 @@ namespace Models
         [MaxLength(100)]
         public string Mail { get; set; }
 
-        public int BrVinyl { get; set; }
 
         [JsonIgnore]
         public virtual List<Prodavac> prodavci { get; set; }
     
         [JsonIgnore]
-        public List<Vinyl> ploce { get; set; }
+        public List<SpojProdavnicaPloca> ploce { get; set; }
 
         
     }

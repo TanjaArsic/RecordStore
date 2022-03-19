@@ -1,6 +1,6 @@
 public enum Zanr
     {   
-    Klasično,
+    Klasično, 
     Pop,
     Trip_hop,
     Hip_hop,
