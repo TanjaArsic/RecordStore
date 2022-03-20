@@ -214,3 +214,20 @@ line-height: 30px;
       color: white;
   }
 
+  .obrisibtn{
+    font-size: 19px;
+    color: #f7f7f7;
+    background-color: #303030;
+    right:    0;
+    bottom:   0;
+    border: 1px solid goldenrod;
+
+  }
+
+  .obrisibtn:hover{
+    font-size: 19px;
+    color: #303030;
+    background-color: black;
+    
+  }
+

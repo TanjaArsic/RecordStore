@@ -112,7 +112,7 @@ export class Prodavnica{
     
 
          this.crtajFormu(kontForma);
-         this.crtajProdavca(host);
+        //  this.crtajProdavca(host);
         
     }
 
@@ -180,6 +180,8 @@ export class Prodavnica{
         this.crtajSelect(sel);
     }
 
+   
+
 
     prikaziploce()
     {
@@ -208,15 +210,15 @@ export class Prodavnica{
                     });
                     })
                 }
-            })
+            })//////////////////////////////////////
             let e=new Prodavnica();
-            let o=this.kont.querySelector(".Forma");
+            let o=this.kont.querySelector(".kontForma");
             console.log(qlist);
             let n=document.querySelectorAll(".PlocaTabela");
             n.forEach(function(a){
             a.addEventListener("click", function(){
                 
-            e.popuni(o,qlist[i]);
+            e.popuni(o,qlist[i]); //qlist je niz ploca
             i++;
               
         })
@@ -229,6 +231,7 @@ export class Prodavnica{
        console.log(el);
         let n=host.querySelector(".nazivploce");
         n.value=el.ime;
+
         console.log(n);
         n=host.querySelector(".izvodjacploce");
         n.value=el.izvodjac.ime;
@@ -240,6 +243,10 @@ export class Prodavnica{
         n.value=el.pesme;
         n=host.querySelector(".cenaploce");
         n.value=el.cena;
+
+        // n=this.kont.querySelector(".btn");
+        // n.innerHTML="Izmeni";
+        // n.value=el.id;
         
 
     }
@@ -398,43 +405,43 @@ export class Prodavnica{
         }
     }
 
-    crtajProdavca(host){
+    // crtajProdavca(host){
 
 
-        let kontPrikaz=document.createElement("div");
-        kontPrikaz.className="sveZaradnike";
-        host.appendChild(kontPrikaz);
+    //     let kontPrikaz=document.createElement("div");
+    //     kontPrikaz.className="sveZaradnike";
+    //     host.appendChild(kontPrikaz);
 
-        let tabela=document.createElement("table");
-        tabela.className="tabela";
-        kontPrikaz.appendChild(tabela);
+    //     let tabela=document.createElement("table");
+    //     tabela.className="tabela";
+    //     kontPrikaz.appendChild(tabela);
 
-        let tabelahead=document.createElement( "thead");
-        tabela.appendChild(tabelahead);
+    //     let tabelahead=document.createElement( "thead");
+    //     tabela.appendChild(tabelahead);
 
-        let tr=document.createElement("tr");
-        tabelahead.appendChild(tr);
+    //     let tr=document.createElement("tr");
+    //     tabelahead.appendChild(tr);
 
-        let tabelaBody=document.createElement("tbody");
-        tabelaBody.className="TabelaPodaci";
-        tabela.appendChild(tabelaBody);
+    //     let tabelaBody=document.createElement("tbody");
+    //     tabelaBody.className="TabelaPodaci";
+    //     tabela.appendChild(tabelaBody);
 
-        let th;
-        var zag=["Ime", "Prezime", "Broj telefona", "Lična karta"];
-        console.log(zag);
-        zag.forEach(el=>{
-            th=document.createElement("th");
-            th.innerHTML=el; //stringovi sa zaglavlj
-            tr.appendChild(th);
-        })
+    //     let th;
+    //     var zag=["Ime", "Prezime", "Broj telefona", "Lična karta"];
+    //     console.log(zag);
+    //     zag.forEach(el=>{
+    //         th=document.createElement("th");
+    //         th.innerHTML=el; //stringovi sa zaglavlj
+    //         tr.appendChild(th);
+    //     })
 
-        // let btn2=document.createElement("button");
-        // btn2.innerHTML="Prikazi prodavce";
-        // btn2.className="btn";
-        // kontPrikaz.appendChild(btn2);
-        // btn2.onclick=(ev)=>this.prikaziprodavce();
+    //     // let btn2=document.createElement("button");
+    //     // btn2.innerHTML="Prikazi prodavce";
+    //     // btn2.className="btn";
+    //     // kontPrikaz.appendChild(btn2);
+    //     // btn2.onclick=(ev)=>this.prikaziprodavce();
 
-    }
+    // }
 
     prikaziprodavce()
     {
@@ -455,7 +462,7 @@ export class Prodavnica{
                     q=new Prodavac(p.ime, p.prezime, p.brojtelefona, p.licnakarta);
                     
                     qlist.push(q);
-                    q.crtajProdavca(m);
+                    // q.crtajProdavca(m);
                 });
                 console.log(qlist);
             })
@@ -463,10 +470,10 @@ export class Prodavnica{
          }
 
         })
-        qlist.forEach(k=>{
-            k.crtajProdavca(m);
-            console.log(1);
-        })
+        // qlist.forEach(k=>{
+        //     k.crtajProdavca(m);
+        //     console.log(1);
+        // })
             
     }
 

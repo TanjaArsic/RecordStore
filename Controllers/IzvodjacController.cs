@@ -34,25 +34,62 @@ namespace wyyybbb.Controllers
             }
         }
 
-        [Route("DodajIzvodjaca")]
+        // [Route("DodajIzvodjaca")]
+        // [HttpPost]
+        // public async Task<ActionResult> DodajIzvodjaca([FromBody] Izvodjac izvodjac)
+        // {
+        //     if (string.IsNullOrWhiteSpace(izvodjac.Ime) || izvodjac.Ime.Length > 50)
+        //     {
+        //         return BadRequest("Lose ime izvodjaca");
+        //     }
+
+        //     try
+        //     {
+        //         Context.Izvodjaci.Add(izvodjac);
+        //         await Context.SaveChangesAsync();
+        //         return Ok($"Izvodjac je dodat! ID je: {izvodjac.ID}");
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         return BadRequest(e.Message);
+        //     }
+        // }
+
+        [Route("DodajIzvodjacaAkoNePostoji/{Ime}")]
         [HttpPost]
-        public async Task<ActionResult> DodajIzvodjaca([FromBody] Izvodjac izvodjac)
+        public async Task<ActionResult> DodajIzvodjaca(string Ime)
         {
-            if (string.IsNullOrWhiteSpace(izvodjac.Ime) || izvodjac.Ime.Length > 50)
-            {
-                return BadRequest("Lose ime izvodjaca");
+            
+            if(Ime.Length>100){
+
+                return BadRequest("Ime je previše dugačko!");
             }
 
+       
+            var i = await Context.Izvodjaci
+            .Where(p => p.Ime == Ime)
+            .FirstOrDefaultAsync();
+
+            if (i != null)
+                return BadRequest("Izvodjac postoji");
             try
             {
+                var izvodjac = new Izvodjac
+                {
+                    Ime = Ime
+
+                };
                 Context.Izvodjaci.Add(izvodjac);
                 await Context.SaveChangesAsync();
-                return Ok($"Izvodjac je dodat! ID je: {izvodjac.ID}");
+                return Ok("Uspešno dodat izvođač " + izvodjac.Ime);
             }
+            
+        
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
+           
         }
 
         [Route("PromenitiIzvodjaca")]

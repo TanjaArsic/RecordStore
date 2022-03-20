@@ -10,18 +10,18 @@ export class Prodavac{
         
     }
 
-    crtajTabelu(m){
-        
-       
-        let miniCont=document.createElement("div");
-        miniCont.className="DIV-tabela";
-        m.appendChild(miniCont);
+    crtajProdavca(host){
+
+
+        let kontPrikaz=document.createElement("div");
+        kontPrikaz.className="sveZaradnike";
+        host.appendChild(kontPrikaz);
 
         let tabela=document.createElement("table");
         tabela.className="tabela";
-        miniCont.appendChild(tabela);
+        kontPrikaz.appendChild(tabela);
 
-        let tabelahead=document.createElement("thead");
+        let tabelahead=document.createElement( "thead");
         tabela.appendChild(tabelahead);
 
         let tr=document.createElement("tr");
@@ -33,12 +33,20 @@ export class Prodavac{
 
         let th;
         var zag=["Ime", "Prezime", "Broj telefona", "Lična karta"];
+        console.log(zag);
         zag.forEach(el=>{
             th=document.createElement("th");
-            th.innerHTML=el;
+            th.innerHTML=el; //stringovi sa zaglavlj
             tr.appendChild(th);
         })
+
+        // let btn2=document.createElement("button");
+        // btn2.innerHTML="Prikazi prodavce";
+        // btn2.className="btn";
+        // kontPrikaz.appendChild(btn2);
+        // btn2.onclick=(ev)=>this.prikaziprodavce();
 
     }
 
 }
+
