@@ -6,7 +6,7 @@ namespace Models
     public class VinylContext : DbContext
     {
         
-        public DbSet<IzdavackaKuca> IzdavackeKuce { get; set; }
+        // public DbSet<IzdavackaKuca> IzdavackeKuce { get; set; }
         public DbSet<Izvodjac> Izvodjaci { get; set; }
         public DbSet<Prodavac> Prodavci { get; set; }
         public DbSet<Prodavnica> Prodavnice { get; set; }

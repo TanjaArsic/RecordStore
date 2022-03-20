@@ -1,7 +1,7 @@
 export class Izvodjac{
     
-    constructor(ime,prezime){
+    constructor(id,ime,){
+        this.id=id;
         this.ime=ime;
-        this.prezime=prezime;
     }
 }

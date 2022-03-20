@@ -71,9 +71,9 @@ namespace wyyybbb.Controllers
         
         // //////////////////////////////////////////////POST////////////////////////////////////////////////
 
-        [Route("DodajPlocu/{nazivProdavnice}/{nazivPloce}/{izvodjac}/{godinastampanja}/{zanr}/{pesme}/{izdavackaKuca}/{cena}")]
+        [Route("DodajPlocu/{nazivProdavnice}/{nazivPloce}/{izvodjac}/{godinastampanja}/{zanr}/{pesme}/{cena}")]
         [HttpPost]
-        public async Task<ActionResult> DodajPlocu([FromRoute]string nazivProdavnice, string nazivPloce, string izvodjac, int godinastampanja, Zanr zanr, string pesme, string izdavackaKuca, int cena) //cela ploca!!
+        public async Task<ActionResult> DodajPlocu([FromRoute]string nazivProdavnice, string nazivPloce, string izvodjac, int godinastampanja, Zanr zanr, string pesme, int cena) //cela ploca!!
         {
             if (string.IsNullOrWhiteSpace(nazivProdavnice) || nazivProdavnice.Length > 50)//bar jedan karakter
             {
@@ -109,10 +109,10 @@ namespace wyyybbb.Controllers
             // .Select(p=>p.ID)
             .FirstOrDefaultAsync();
 
-            var iz = await Context.IzdavackeKuce
-            .Where(p=> p.Ime == izdavackaKuca)
-            // .Select(p=>p.ID)
-            .FirstOrDefaultAsync();
+            // var iz = await Context.IzdavackeKuce
+            // .Where(p=> p.Ime == izdavackaKuca)
+            // // .Select(p=>p.ID)
+            // .FirstOrDefaultAsync();
 
             try
             {
@@ -121,7 +121,6 @@ namespace wyyybbb.Controllers
                 Zanr=zanr,
                 GodinaStampanja=godinastampanja,
                 izvodjac=i,
-                izdavackaKuca=iz,
                 Pesme=pesme
                 };
                 Context.Ploce.Add(Vinyl);
@@ -271,32 +270,7 @@ namespace wyyybbb.Controllers
         // }
         ////////////////////////////////////////////////////PUT///////////////////////////////////////////////////
 
-        ////////////////////////////////////////////////DELETE/////////////////////////////////////////////////
-
-        [Route("IzbrisatiPlocu/{id}")] //UVEK SAVETUJE 
-        [HttpDelete]
-        public async Task<ActionResult> Izbrisi(int id)
-        {
-            if (id <= 0)
-            {
-                return BadRequest("Pogrešan ID!");
-            }
-
-            try
-            {
-                var vinyl = await Context.Ploce.FindAsync(id);
-                string ime = vinyl.Ime; //stavlja se ovo pre nego sto se obrise ploca da se sacuva kao info
-                //ako zelimo sve info da zapamtimo, int x=Context.Ploce.Where(p=>p.Ime=="nesto").FirstOrDefault();  cuva referencu na njegov model
-                Context.Ploce.Remove(vinyl); //ef metoda za brisanje
-                await Context.SaveChangesAsync(); //u bazi se cuva
-                return Ok($"Uspešno izbrisana ploca sa Imenom: {ime}"); //izvlaci se pre nego sto se obrise podatak
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
+        
     }
 }
 

@@ -34,8 +34,8 @@ namespace Models
         [JsonIgnore]
         public Izvodjac izvodjac { get; set; }
 
-        [JsonIgnore]
-        public IzdavackaKuca izdavackaKuca { get; set; }
+        // [JsonIgnore]
+        // public IzdavackaKuca izdavackaKuca { get; set; }
 
         [JsonIgnore]
         public List<SpojProdavnicaPloca> prodavnica { get; set; }

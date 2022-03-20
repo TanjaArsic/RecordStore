@@ -1,5 +1,5 @@
 import { Vinyl } from "./vinyl.js";
-// // import{ Prodavac } from "./prodavac.cs"
+import{ Prodavac } from "./prodavac.js";
 
 export class Prodavnica{
     constructor(id,naziv,adresa,mail,brVinyl){
@@ -9,48 +9,52 @@ export class Prodavnica{
         this.mail=mail;
         this.brVinyl=brVinyl;
         this.kont=null;    
-        this.ploce=[];
+        
     }
 
-    dodajPlocu(pl){
+    dodajiliIzmeniPlocu(pl){
         let p=this.kont.querySelector(".PRODAVNICA");
         p=p.innerHTML;
 
         let q=this.kont.querySelector(".nazivploce");
-        q=q.innerHTML;
+        q=q.value;
 
         let q1=this.kont.querySelector(".izvodjacploce");
-        q1=q1.innerHTML;
+        q1=q1.value;
 
-        let q2=this.kont.querySelector(".izdavackakucaploce");
-        q2=q2.innerHTML;
+        // let q2=this.kont.querySelector(".izdavackakucaploce");
+        // q2=q2.innerHTML;
         let q3=this.kont.querySelector(".godstampanjaploce");
-        q3=q3.innerHTML;
+        q3=q3.value;
         let q4=this.kont.querySelector(".pesmeploce");
-        q4=q4.innerHTML;
+        q4=q4.value;
         let q5=this.kont.querySelector(".cenaploce");
-        q5=q5.innerHTML;
+        q5=q5.value;
         
         let m=this.kont.querySelector(".selektZanra");
-        let  zanr=m.querySelector('input[name="selektZanra"]').value;
+        let zanr=this.kont.querySelector("select").value;
 
         console.log(m);
         console.log(zanr);
-        fetch("https://localhost:5001/SpojProdavnicaPloca/DodajPlocu/" + p + "/" + q + "/" + q1 + "/" + q3 + "/" + zanr+"/" + q4+"/" + q2+"/" + q5,
-        {
-            method: "POST",
-      
-        }).then(p => {
-            if (p.ok) {
-               console.log("Uspesno uneta ploca!");   
-              
-              
-          }
-             
-            
-                       
-              });
+
+        // if(btn=="OK"){
+            fetch("https://localhost:5001/SpojProdavnicaPloca/DodajPlocu/" + p + "/" + q + "/" + q1 + "/" + q3 + "/" + zanr +"/" + q4 +"/" + q5,
+            {
+                method: "POST",
         
+            }).then(p => {
+                if(q3<1930 || q3>2022) alert("Molimo unesite validnu godinu štampanja ploče!");
+                if(q5<0) alert("Unesite validnu cenu ploče!");
+                if (p.ok) 
+                alert("Uspešno ste dodali ploču!");   
+                else alert("Neuspešno dodavanje ploče!")
+                
+            });
+        
+
+        // else if(btn=="Izmeni"){
+
+        // }
     }
 
     crtaj(host, gost){  //<!---crtajprodavnicu--->
@@ -64,6 +68,22 @@ export class Prodavnica{
         PRODAVNICA.innerHTML=gost;
         this.kont.appendChild(PRODAVNICA);
 
+        let navbar=document.createElement("navbar");
+        navbar.className="navbar";
+        this.kont.appendChild(navbar);
+
+        let btn1=document.createElement("button");
+        btn1.innerHTML="PLOČE";
+        btn1.className="btns";
+        navbar.appendChild(btn1);
+        btn1.onclick=(ev)=>this.prikaziploce();
+
+        let btn2=document.createElement("button");
+        btn2.innerHTML="PRODAVCI";
+        btn2.className="btns";
+        navbar.appendChild(btn2);
+        btn2.onclick=(ev)=>this.prikaziprodavce();
+
         let VelikiDiv=document.createElement("div");
         VelikiDiv.className="VELIKIDIV";
         this.kont.appendChild(VelikiDiv);
@@ -76,9 +96,15 @@ export class Prodavnica{
         PlocaTabela.className="PlocaTabela";
         VelikiDiv.appendChild(PlocaTabela);
 
+        let deoZaRadnike=document.createElement("div");
+        deoZaRadnike.className="RADNICI";
+        this.kont.appendChild(deoZaRadnike);
+
         let tabelaRadnici=document.createElement("div");
-        tabelaRadnici.className="TabelaRadnici";
-        this.kont.appendChild(tabelaRadnici);
+        tabelaRadnici.className="tabelaRadnici";
+        deoZaRadnike.appendChild(tabelaRadnici);
+
+
         
         // const btn=document.createElement("button");
         // btn.addEventListener=(ev)
@@ -86,6 +112,7 @@ export class Prodavnica{
     
 
          this.crtajFormu(kontForma);
+         this.crtajProdavca(host);
         
     }
 
@@ -104,14 +131,14 @@ export class Prodavnica{
         input.className="izvodjacploce";
         nekidiv.appendChild(input);
 
-        nekidiv=this.crtajDiv(kontForma);
-        this.crtajLabelu(nekidiv,"Izdavacka kuca: ");
-        input=document.createElement("input");
-        input.className="izdavackakucaploce";
-        nekidiv.appendChild(input);
+        // nekidiv=this.crtajDiv(kontForma);
+        // this.crtajLabelu(nekidiv,"Izdavacka kuca: ");
+        // input=document.createElement("input");
+        // input.className="izdavackakucaploce";
+        // nekidiv.appendChild(input);
 
         nekidiv=this.crtajDiv(kontForma);
-        this.crtajLabelu(nekidiv,"Godina stampanja: ");
+        this.crtajLabelu(nekidiv,"Godina štampanja: ");
         input=document.createElement("input");
         input.className="godstampanjaploce";
         nekidiv.appendChild(input);
@@ -119,14 +146,15 @@ export class Prodavnica{
         nekidiv=this.crtajDiv(kontForma);
         this.crtajLabelu(nekidiv,"Pesme: ");
        //input=document.createElement("input");
-       input=document.createElement("textarea");
+        input=document.createElement("textarea");
         input.className="pesmeploce";
         nekidiv.appendChild(input);
         
         nekidiv=this.crtajDiv(kontForma);
-        this.crtajLabelu(nekidiv,"Zanr: ");
+        this.crtajLabelu(nekidiv,"Žanr: ");
         let sel=document.createElement("select");
         sel.className="selektZanra";
+        sel.name="selektZanra";
         nekidiv.appendChild(sel);
 
         nekidiv=this.crtajDiv(kontForma);
@@ -138,20 +166,26 @@ export class Prodavnica{
         nekidiv=this.crtajDiv(kontForma);
         let btn=document.createElement("button");
         btn.innerHTML="OK";
+        btn.className="btn";
         nekidiv.appendChild(btn);
-        btn.onclick=(ev)=>this.dodajPlocu();
+        btn.onclick=(ev)=>this.dodajiliIzmeniPlocu();
 
-        nekidiv=this.crtajDiv(kontForma);
-        let btn1=document.createElement("button");
-        btn1.innerHTML="Prikazi ploce";
-        nekidiv.appendChild(btn1);
-        btn1.onclick=(ev)=>this.prikaziploce();
+        // nekidiv=this.crtajDiv(kontForma);
+        // let btn1=document.createElement("button");
+        // btn1.innerHTML="Prikazi ploče";
+        // btn1.className="btn";
+        // nekidiv.appendChild(btn1);
+        // btn1.onclick=(ev)=>this.prikaziploce();
 
         this.crtajSelect(sel);
     }
+
+
     prikaziploce()
     {
         let m=this.kont.querySelector(".PlocaTabela");
+        this.ocisti(m);
+        // document.querySelector(".PlocaTabela").innerHTML = "";
         let p=this.kont.querySelector(".PRODAVNICA");
         p=p.innerHTML;
         let qlist=[];
@@ -165,14 +199,13 @@ export class Prodavnica{
         }).then(p=>{
             if(p.ok)
             {
-                
-                    p.json().then(ploce=>{
-                        console.log(ploce);
-                        ploce.forEach(i=>{
-                            q=new Vinyl(i.ploca.id,i.ploca.ime,i.ploca.zanr,i.ploca.pesme,i.ploca.godinaStampanja,i.cena,i.kolicina,i.izvodjac);
-                           q.crtajVinyl(m);
-                         qlist.push(q);
-         });
+                p.json().then(ploce=>{
+                    console.log(ploce);
+                    ploce.forEach(i=>{
+                        q=new Vinyl(i.ploca.id,i.ploca.ime,i.ploca.zanr,i.ploca.pesme,i.ploca.godinaStampanja,i.cena,i.kolicina,i.izvodjac);
+                        q.crtajVinyl(m);
+                        qlist.push(q);
+                    });
                     })
                 }
             })
@@ -183,14 +216,15 @@ export class Prodavnica{
             n.forEach(function(a){
             a.addEventListener("click", function(){
                 
-               e.popuni(o,qlist[i]);
-                i++;
+            e.popuni(o,qlist[i]);
+            i++;
               
         })
     })
     }
-    popuni(host,el)
-    {
+
+
+    popuni(host,el){
        
        console.log(el);
         let n=host.querySelector(".nazivploce");
@@ -199,8 +233,6 @@ export class Prodavnica{
         n=host.querySelector(".izvodjacploce");
         n.value=el.izvodjac.ime;
 
-       
-
         n=host.querySelector(".godstampanjaploce");
         n.value=el.godinastampanja;
 
@@ -208,8 +240,10 @@ export class Prodavnica{
         n.value=el.pesme;
         n=host.querySelector(".cenaploce");
         n.value=el.cena;
+        
 
     }
+
     crtajDiv(kontForma){
         let d=document.createElement("div");
         kontForma.appendChild(d);
@@ -252,8 +286,8 @@ export class Prodavnica{
             }
         )
     }
-    ocisti(l)
-    {
+
+    ocisti(l) {
         while (l.firstChild) {
          
             l.lastChild.innerHTML=" ";
@@ -262,6 +296,7 @@ export class Prodavnica{
           }
           console.log(l);
     }
+
     crtajPloce(host){
             this.kont=document.createElement("div");
             this.kont.className="GomilaPloca";
@@ -270,7 +305,7 @@ export class Prodavnica{
             var button = document.createElement("button");
             button.innerHTML = "Do Something";
 
-            host = document.getElementsByTagName("body")[0];
+            host = document.getElementsByTagName("body")[0]; 
             host.appendChild(button);
 
             // 3. Add event handler
@@ -278,9 +313,9 @@ export class Prodavnica{
             alert("did something");
             });
             const BtnAdd=document.querySelector(".btn.add");
-            BtnAdd.addEventListener("click", dodajPlocu);
+            BtnAdd.addEventListener("click", dodajiliIzmeniPlocu);
     
-            function dodajPlocu(){
+            function dodajiliIzmeniPlocu(){
                 const newDiv=document.createElement("div");
                 console.log("add");
     
@@ -361,6 +396,78 @@ export class Prodavnica{
             break;
 
         }
+    }
+
+    crtajProdavca(host){
+
+
+        let kontPrikaz=document.createElement("div");
+        kontPrikaz.className="sveZaradnike";
+        host.appendChild(kontPrikaz);
+
+        let tabela=document.createElement("table");
+        tabela.className="tabela";
+        kontPrikaz.appendChild(tabela);
+
+        let tabelahead=document.createElement( "thead");
+        tabela.appendChild(tabelahead);
+
+        let tr=document.createElement("tr");
+        tabelahead.appendChild(tr);
+
+        let tabelaBody=document.createElement("tbody");
+        tabelaBody.className="TabelaPodaci";
+        tabela.appendChild(tabelaBody);
+
+        let th;
+        var zag=["Ime", "Prezime", "Broj telefona", "Lična karta"];
+        console.log(zag);
+        zag.forEach(el=>{
+            th=document.createElement("th");
+            th.innerHTML=el; //stringovi sa zaglavlj
+            tr.appendChild(th);
+        })
+
+        // let btn2=document.createElement("button");
+        // btn2.innerHTML="Prikazi prodavce";
+        // btn2.className="btn";
+        // kontPrikaz.appendChild(btn2);
+        // btn2.onclick=(ev)=>this.prikaziprodavce();
+
+    }
+
+    prikaziprodavce()
+    {
+        let m=this.kont.querySelector(".tabelaRadnici");
+        let p=this.kont.querySelector(".PRODAVNICA");
+        p=p.innerHTML;
+        let q;
+        let qlist=[];
+        fetch("https://localhost:5001/Prodavac/PrikaziProdavca/"+ p,
+        {
+            method:"GET",
+
+        }).then(p=>{
+            if(p.ok)
+            {                
+            p.json().then(prodavci=>{
+                prodavci.forEach(p=>{
+                    q=new Prodavac(p.ime, p.prezime, p.brojtelefona, p.licnakarta);
+                    
+                    qlist.push(q);
+                    q.crtajProdavca(m);
+                });
+                console.log(qlist);
+            })
+            
+         }
+
+        })
+        qlist.forEach(k=>{
+            k.crtajProdavca(m);
+            console.log(1);
+        })
+            
     }
 
     

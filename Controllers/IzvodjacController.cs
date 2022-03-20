@@ -26,7 +26,7 @@ namespace wyyybbb.Controllers
         {
             try
             {
-                return Ok(await Context.Izvodjaci.Select(p => new { p.ID, p.Ime, p.Prezime }).ToListAsync());
+                return Ok(await Context.Izvodjaci.Select(p => new { p.ID, p.Ime}).ToListAsync());
             }
             catch (Exception e)
             {
@@ -41,11 +41,6 @@ namespace wyyybbb.Controllers
             if (string.IsNullOrWhiteSpace(izvodjac.Ime) || izvodjac.Ime.Length > 50)
             {
                 return BadRequest("Lose ime izvodjaca");
-            }
-
-            if (string.IsNullOrWhiteSpace(izvodjac.Prezime) || izvodjac.Prezime.Length > 50)
-            {
-                return BadRequest("Lose prezime izvodjaca");
             }
 
             try
@@ -69,15 +64,11 @@ namespace wyyybbb.Controllers
                 return BadRequest("Pogrešan ID!");
             }
 
-            if (string.IsNullOrWhiteSpace(izvodjac.Ime) || izvodjac.Ime.Length > 50)
+            if (izvodjac.Ime.Length > 100)
             {
                 return BadRequest("Lose ime izvodjaca");
             }
 
-            if (string.IsNullOrWhiteSpace(izvodjac.Prezime) || izvodjac.Prezime.Length > 50)
-            {
-                return BadRequest("Lose prezime izvodjaca");
-            }
 
             try
             {
@@ -106,7 +97,7 @@ namespace wyyybbb.Controllers
                 var izvodjac = await Context.Izvodjaci.FindAsync(id);
                 Context.Izvodjaci.Remove(izvodjac);
                 await Context.SaveChangesAsync();
-                return Ok($"Uspešno izbrisan izvodjac {izvodjac.Ime} {izvodjac.Prezime}");
+                return Ok($"Uspešno izbrisan izvodjac {izvodjac.Ime} ");
             }
             catch (Exception e)
             {

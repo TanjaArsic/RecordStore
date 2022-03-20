@@ -10,11 +10,8 @@ namespace Models
         [Key]
         public int ID { get; set; }
 
-        [MaxLength(50)]
+        [MaxLength(100)]
         public string Ime { get; set; }
-
-        [MaxLength(50)]
-        public string Prezime { get; set; }
 
         [JsonIgnore]
         public virtual List<Vinyl> ploce { get; set; }

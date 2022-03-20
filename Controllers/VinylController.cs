@@ -74,15 +74,14 @@ namespace wyyybbb.Controllers
         //     // }
         // }
 
-        [Route("PrikaziPesme/{Ime}/{ImeIzvodjaca}/{PrezimeIzvodjaca}")]
+        [Route("PrikaziPesme/{Ime}/{ImeIzvodjaca}")]
         [HttpGet]
-        public async Task<ActionResult> PreuzmiPesme(string ImePloce, string ImeIzvodjaca, string PrezimeIzvodjaca)
+        public async Task<ActionResult> PreuzmiPesme(string ImePloce, string ImeIzvodjaca)
         {
              var vinyl = await Context.Ploce
                     .Include(p => p.izvodjac)
                     .Where(p => p.Ime == ImePloce &&
-                    p.izvodjac.Ime == ImeIzvodjaca &&
-                    p.izvodjac.Prezime == PrezimeIzvodjaca).FirstOrDefaultAsync();
+                    p.izvodjac.Ime == ImeIzvodjaca ).FirstOrDefaultAsync();
 
             if (vinyl != null)
                 return Ok(vinyl.Pesme);
@@ -184,84 +183,6 @@ namespace wyyybbb.Controllers
         //     }
         // }
 
-        // [Route("Plocu_dodeli_+Prodavnicu_+Izvodjaca/{ime}/{zanr}/{godinastampanja}/{pesme}/{prodavnica}/{izvodjac}")]
-        // [HttpPost]
-        // public async Task<ActionResult> DodajPsaUzmiIDDodeliAzil(string ime, Zanr zanr, int godinastampanja, string pesme, string prodavnica, string izvodjac, string izvodjacp)
-        // {
-        //     if (string.IsNullOrWhiteSpace(ime) || ime.Length > 50)//bar jedan karakter
-        //     {
-        //         return BadRequest("Pogrešno ime!");
-        //     }
-
-        //     if (godinastampanja < 1930 || godinastampanja > 2022)
-        //     {
-        //         return BadRequest("Uneti validnu godinu štampanja ploče!");
-        //     }
-
-
-        //     if (string.IsNullOrWhiteSpace(pesme))
-        //     {
-        //         return BadRequest("Niste uneli pesme!");
-        //     }
-
-        //     if (!Enum.IsDefined(typeof(Zanr), zanr))
-        //     {
-        //         return BadRequest("Uneti validan zanr ploče.");
-        //     }
-
-            
-           
-        //     var p= await Context.Prodavnice.Where(q=>q.prodavnica.Naziv==prodavnica.Naziv).FirstOrDefaultAsync();
-        //     var i=await Context.Izvodjaci.Where(q=>(q.Ime==izvodjac && q.Prezime==izvodjacp)).FirstOrDefaultAsync();
-            
-
-        //     // var izdavacka_kuca=await Context.IzdavackeKuce.Where(q=>q.Ime==ik).FirstOrDefaultAsync();
-        //     if(i==null)
-        //     {
-        //         i= new Izvodjac{
-        //         Ime=izvodjac,
-        //         Prezime=izvodjacp
-        //         };
-
-        //         Context.Izvodjaci.Add(i);
-        //           Context.SaveChanges();
-
-        //     }
-        //     // if(izdavacka_kuca==null)
-        //     // {
-        //     //     izdavacka_kuca=new IzdavackaKuca{
-        //     //     Ime=ik
-        //     // };
-
-        //     //     Context.IzdavackeKuce.Add(izdavacka_kuca);
-        //     //       Context.SaveChanges();
-
-        //     // }
-        //     try
-        //     {
-
-        //         var Vinyl=new Vinyl{
-        //         Ime=ime,
-        //         Zanr=zanr,
-        //         GodinaStampanja=godinastampanja,
-        //         Pesme=pesme,
-        //         izvodjac=i,
-        //         prodavnica.prodavnica=p,
-        //         // izdavackaKuca=izdavacka_kuca
-        //         };
-            
-
-        //         Context.Ploce.Add(Vinyl);
-        //         await Context.SaveChangesAsync();//da bi se obavljalo u pozadinskoj niti,neblokirajuca metoda
-        //         //vraca broj podataka koje smo upisali
-        //          return Ok(Vinyl);
-                
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         return BadRequest(e.Message);
-        //     }
-        // }
         ////////////////////////////////////////////////////PUT///////////////////////////////////////////////////
 
         [Route("PromenitiVinyl/{ime}/{godinaStampanja}")] //posebne podatke da promenimo
@@ -331,31 +252,41 @@ namespace wyyybbb.Controllers
         }
         ////////////////////////////////////////////////DELETE/////////////////////////////////////////////////
 
-        [Route("IzbrisatiPlocu/{id}")] //UVEK SAVETUJE 
+        [Route("ObrisiPlocu/{id}")]
         [HttpDelete]
-        public async Task<ActionResult> Izbrisi(int id)
+        public async Task<ActionResult> ObrisiPlocu(int id)
         {
-            if (id <= 0)
-            {
-                return BadRequest("Pogrešan ID!");
-            }
-
             try
             {
-                var vinyl = await Context.Ploce.FindAsync(id);
-                string ime = vinyl.Ime; //stavlja se ovo pre nego sto se obrise ploca da se sacuva kao info
-                //ako zelimo sve info da zapamtimo, int x=Context.Ploce.Where(p=>p.Ime=="nesto").FirstOrDefault();  cuva referencu na njegov model
-                Context.Ploce.Remove(vinyl); //ef metoda za brisanje
-                await Context.SaveChangesAsync(); //u bazi se cuva
-                return Ok($"Uspešno izbrisana ploca sa Imenom: {ime}"); //izvlaci se pre nego sto se obrise podatak
+                var vinyl = await Context.Ploce
+                .Where(p => p.ID == id)
+                .FirstOrDefaultAsync();
+
+                if (vinyl == null) 
+                
+                    return BadRequest("Ploca ne postoji.");
+
+                var pp = await Context.ProdavnicaPloca
+                .Where(p => p.ploca == vinyl)
+                .ToListAsync();
+
+                foreach (SpojProdavnicaPloca ploca in pp)
+                {
+                    Context.ProdavnicaPloca.Remove(ploca);
+                }
+
+                Context.Ploce.Remove(vinyl);
+                await Context.SaveChangesAsync();
+                return Ok("Ploca je obrisana!");
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
         }
-
     }
+
 }
+
 
 

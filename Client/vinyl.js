@@ -11,7 +11,6 @@ export class Vinyl{
         this.izvodjac=izvodjac
        
         
-        
     }
 
     crtajLabelu1(kontForma,unutrasnjiHTML){
@@ -22,9 +21,9 @@ export class Vinyl{
 
 
     }
-    crtajDiv1(kontForma){
+    crtajDiv1(PlocaTabela){
         let d=document.createElement("div");
-        kontForma.appendChild(d);
+        PlocaTabela.appendChild(d);
         return d;
 
     }
@@ -37,18 +36,15 @@ export class Vinyl{
 
         let d=this.crtajDiv1(miniCont);
        this.crtajLabelu1(d,this.ime);
+
        d=this.crtajDiv1(miniCont);
        this.crtajLabelu1(d,this.izvodjac.ime);
+
        d=this.crtajDiv1(miniCont);
        this.crtajLabelu1(d,this.pesme);
 
        d=this.crtajDiv1(miniCont);
        this.crtajLabelu1(d,this.cena);
-
-
-
-
-        
 
 
     }

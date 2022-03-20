@@ -42,55 +42,35 @@ namespace wyyybbb.Controllers
             }
         }
 
-        // [Route("DodajPolozeniIspit/{indeks}/{idPredmeta}/{idRoka}/{ocena}")]
-        // [HttpPost]
-        // public async Task<ActionResult> DodajIspit(int indeks, int idPredmeta, int idRoka, int ocena)
-        // {
-        //     if (indeks < 10000 || indeks > 20000)
-        //     {
-        //         return BadRequest("Pogrešan broj indeksa");
-        //     }
-        //     //...
 
-        //     try
-        //     {
-        //         var student = await Context.Studenti.Where(p => p.Indeks == indeks).FirstOrDefaultAsync();
-        //         var predmet = await Context.Predmeti.Where(p => p.ID == idPredmeta).FirstOrDefaultAsync();
-        //         var ispitniRok = await Context.Rokovi.FindAsync(idRoka);
+        [EnableCors("CORS")]
+        [Route("PrikaziProdavca/{imeProdavnice}")]
+        [HttpGet]
+        public async Task<ActionResult> PrikaziProdavca(string imeProdavnice)
+        {
+            try
+            {
+                var prod = await Context.Prodavnice
+                .Include(p=>p.prodavci)
+                .Where(p=>p.Naziv==imeProdavnice)
+                .FirstOrDefaultAsync();
+                return Ok(prod.prodavci.Select(q =>
+                new
+                {
+                    ID=q.ID,
+                    Ime=q.Ime,
+                    Prezime=q.Prezime,
+                    BrojTelefona=q.BrojTelefona,
+                    LicnaKarta=q.LicnaKarta
 
-        //         Spoj s = new Spoj
-        //         {
-        //             Student = student,
-        //             Predmet = predmet,
-        //             IspitniRok = ispitniRok,
-        //             Ocena = ocena
-        //         };
+                }));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
-        //         Context.StudentiPredmeti.Add(s);
-        //         await Context.SaveChangesAsync();
-
-        //         var podaciOStudnetu = await Context.StudentiPredmeti
-        //                 .Include(p => p.Student)
-        //                 .Include(p => p.Predmet)
-        //                 .Include(p => p.IspitniRok)
-        //                 .Where(p => p.Student.Indeks == indeks)
-        //                 .Select(p =>
-        //                 new
-        //                 {
-        //                     Indeks = p.Student.Indeks,
-        //                     Ime = p.Student.Ime,
-        //                     Prezime = p.Student.Prezime,
-        //                     Predmet = p.Predmet.Naziv,
-        //                     IspitniRok = p.IspitniRok.Naziv,
-        //                     Ocena = p.Ocena
-        //                 }).ToListAsync();
-        //         return Ok(podaciOStudnetu);
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         return BadRequest(e.Message);
-        //     }
-        // }
 
         [Route("DodajProdavca/{ime}")]
         [HttpPost]

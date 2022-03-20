@@ -20,6 +20,8 @@
     /* align-self:center; */
     /* justify-content: flex-start; */
     margin: 20px;
+      
+      
 }
 
 body {
@@ -42,8 +44,24 @@ body {
     text-emphasis-color: #ffffff;
     margin-right: 0%;
 }
+
+.PRODAVNICA{ 
+    
+    font-style: oblique;
+    color: rgb(255, 255, 255);
+    font-size: 90px;
+    margin: 100px;
+    flex-grow: 0 1 auto;
+    text-align: center;
+    position: relative;
+  
+}
 .lab{
-    color:white;
+    color:goldenrod;
+    padding: 12px 12px 12px 0;
+    display: inline-block;
+    
+      
 }
 .Labela{
     color:goldenrod;
@@ -59,6 +77,19 @@ body {
     color:white;
 }
 
+.navbar{
+    background-color: #303030;
+    margin-bottom: 20px;
+    height: 100;
+    padding: 20px;
+    justify-content:center;
+    justify-content: space-around;
+    position: relative;
+    align-items:stretch;
+    display:flex;
+    flex-grow: 20px 10px;
+}
+
 .InputiForma{
     display:flex;
     flex-direction: row;
@@ -67,30 +98,70 @@ body {
 }
 .jedanvinyl
 {
-    background-color: #ffffff;
-    border: 2px solid red; 
+  width:170px;
+  height:170px;
+  /* border-radius:90%; */
+  background: rgba(119, 116, 115, 0.5);
+  border:3px solid rgb(92, 85, 85);
+  /* position:relative; */
+  text-align: center;
+  align-items: center;
+  text-decoration: solid;
+  word-wrap: break-word;
+  font-style: oblique;
+  font-family: "Times New Roman", Times, serif;
+  margin: 10px;
+  float: left;
+  border-radius: 25px;
+  /* padding:10px; */
+  /* padding-top: 50px; */
+/* overflow-x: auto;
+    overflow-y: hidden; */
+    vertical-align: middle;
+    text-align: center;
+vertical-align: middle;
+line-height: 30px;
+    
+}
+
+.jedanvinyl:hover{
+    background-color: black;
     
 }
 .lab1
 {
-    color:red;
+    color:goldenrod;
+
 }
 .Forma{
-    margin:3px solid red;
+    border:3px;
+    padding: 14px;
+    background-color: #303030;
+    position: relative;
+    border-radius: 25px;
+    height: fit-content;
     width: 155px;
-    height: 350px;
+
+    
+    /* flex: auto; */
 }
 
 .PlocaTabela{
-    margin:3px solid white;
-    width: 600px;
-    height: 350px;
+    margin-left:30px;
+    /* width: 600px;
+    height: 350px; */
+    justify-content: space-evenly;
+    flex-direction: row;
+    position:relative;
+
 
 }
 
 .VELIKIDIV{
     display:flex;
-    flex-direction: row;
+    /* flex-wrap: wrap; */
+    position: relative;
+    /* flex-direction:column; */
 
 }
 
@@ -98,4 +169,48 @@ body {
     display:flex;
     flex-direction: column;
 }
+.btn {
+        background-color: #f7f7f7; /* Green */
+        border: 2px solid grey;
+        color: rgb(0, 0, 0);
+        padding: 10px 50px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 10px 5px;
+        transition-duration: 0.4s;
+        cursor: pointer;
+ }
+
+ .btns{ 
+    background-color:#303030; /* Green */
+    border: 2px solid #303030;
+    color: rgb(228, 228, 228);
+    padding: 10px 50px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 29px;
+    margin: 6px 3px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    font-style: oblique;
+    font-family: "Times New Roman", Times, serif;
+
+ }
+
+  
+  .btn:hover {
+    background-color: #303030; /* Green */
+    color: white;
+  }
+
+  .pesmeploce{
+      width: 140px;
+  }
+
+  .tabela{
+      color: white;
+  }
 

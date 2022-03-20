@@ -7,16 +7,18 @@ fetch("https://localhost:5001/Prodavnica/Prodavnica")
         let pocetni=document.createElement("div");
         pocetni.className="PocetniDIV";
         document.body.appendChild(pocetni);
+        
+        let labela=document.createElement("label");
+        labela.innerHTML="Prodavnica";
+        labela.className="Labela";
+        pocetni.appendChild(labela);
 
         let sel=document.createElement("select");
         sel.className="Select";
         sel.innerHTML="prodavnica";
         pocetni.appendChild(sel);
 
-        let labela=document.createElement("label");
-        labela.innerHTML="Prodavnica";
-        labela.className="Labela";
-        pocetni.appendChild(labela);
+
 
         let op;
         let sava;
