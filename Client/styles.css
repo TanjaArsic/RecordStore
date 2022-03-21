@@ -24,11 +24,27 @@
       
 }
 
+.hue{
+    display: flex;
+    flex-direction: column;
+    flex:0 1 auto;
+    justify-content: center;
+    align-content: center;
+    margin-top: 100px;
+    margin-bottom: 80px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 body {
     background-image: url("https://images6.alphacoders.com/359/thumb-1920-359085.jpg"); 
     background-image:blur(8px);
     /* background-color:  #1b1b1b; */
     height: 100%; 
+}
+
+.podacioprodavnici{
+    color: rgba(255,255,255,0.5);
 }
 
 .Select{
@@ -50,10 +66,10 @@ body {
     font-style: oblique;
     color: rgb(255, 255, 255);
     font-size: 90px;
-    margin: 100px;
+    /* margin: 100px; */
     flex-grow: 0 1 auto;
-    text-align: center;
-    position: relative;
+    /* text-align: center; */
+    /* position: relative; */
   
 }
 .lab{
@@ -63,6 +79,12 @@ body {
     
       
 }
+
+.lab:hover{
+    color:black;
+      
+}
+
 .Labela{
     color:goldenrod;
     font-style: oblique;
@@ -119,8 +141,8 @@ body {
     overflow-y: hidden; */
     vertical-align: middle;
     text-align: center;
-vertical-align: middle;
-line-height: 30px;
+    vertical-align: middle;
+    line-height: 30px;
     
 }
 
@@ -141,6 +163,7 @@ line-height: 30px;
     border-radius: 25px;
     height: fit-content;
     width: 155px;
+    padding: 30px;
 
     
     /* flex: auto; */
@@ -179,6 +202,7 @@ line-height: 30px;
         display: inline-block;
         font-size: 16px;
         margin: 10px 5px;
+        margin-left: 12clspx;
         transition-duration: 0.4s;
         cursor: pointer;
  }
@@ -231,3 +255,52 @@ line-height: 30px;
     
   }
 
+  .tabelaRadnici{
+      background-color: black;
+      border: 1px solid grey;
+      margin:10px;
+      border-radius: 10px;
+
+  }
+
+  table,th,tr,td
+{
+    display: flex;
+    flex: 1 0;
+}
+table
+{
+    flex-direction: column;
+    background-color: rgb(44, 44, 48);
+    border-radius: 10px;
+    margin: 1px;
+}
+th
+{
+    border: 1px solid gray;
+    border-radius: 10px;
+    margin: 1px;
+    padding: 5px;
+}
+tr
+{
+    display: flex;
+    flex: 1 0;
+    flex-direction: row;
+    background-color: rgb(44, 44, 48);
+    color: gray;
+    border-radius: 10px;
+    margin: 1px;
+}
+td
+{
+    display: flex;
+    flex: 1 0;
+    flex-direction: row;
+    background-color: rgb(44, 44, 48);
+    color: goldenrod;
+    border: 1px solid gray;
+    border-radius: 10px;
+    margin: 1px;
+    padding: 3px;
+}

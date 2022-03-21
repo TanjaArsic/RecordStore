@@ -57,16 +57,44 @@ export class Prodavnica{
         // }
     }
 
-    crtaj(host, gost){  //<!---crtajprodavnicu--->
+    crtaj(kont, gost){  //<!---crtajprodavnicu--->
 
-        this.kont=document.createElement("div");
-        this.kont.className="GlavniKontejner";
-        host.appendChild(this.kont);
+        kont.replaceChildren();
+
+        this.kont=kont;
+
+        let prodavnica=document.createElement("div");
+        prodavnica.className="hue";
+        this.kont.appendChild(prodavnica);
 
         let PRODAVNICA =document.createElement("label");
         PRODAVNICA.className="PRODAVNICA";
         PRODAVNICA.innerHTML=gost;
-        this.kont.appendChild(PRODAVNICA);
+        prodavnica.appendChild(PRODAVNICA);
+
+        let adresa=document.createElement("div");
+        adresa.className="adresa";
+        prodavnica.appendChild(adresa);
+///////////////////////////////////////////////////////////kako se ovo radi
+        let p=this.kont.querySelector(".PRODAVNICA");
+        p=p.innerHTML;
+        console.log(p);
+        let q=document.createElement("label");
+        q.innerHTML="Adresa: "+ p.adresa;///////////////////////////////////////zasto je undefined
+        console.log(q);
+
+        q.className="podacioprodavnici";
+        adresa.appendChild(q);
+
+        let madresa=document.createElement("div");
+        madresa.className="adresa";
+        prodavnica.appendChild(madresa);
+        let q1=document.createElement("label");
+        q1.innerHTML=" Mail: "+ this.mail;
+        q1.className="podacioprodavnici";
+        madresa.appendChild(q1);
+
+///////////////////
 
         let navbar=document.createElement("navbar");
         navbar.className="navbar";
@@ -130,12 +158,6 @@ export class Prodavnica{
         input=document.createElement("input");
         input.className="izvodjacploce";
         nekidiv.appendChild(input);
-
-        // nekidiv=this.crtajDiv(kontForma);
-        // this.crtajLabelu(nekidiv,"Izdavacka kuca: ");
-        // input=document.createElement("input");
-        // input.className="izdavackakucaploce";
-        // nekidiv.appendChild(input);
 
         nekidiv=this.crtajDiv(kontForma);
         this.crtajLabelu(nekidiv,"Godina štampanja: ");
@@ -280,11 +302,11 @@ export class Prodavnica{
             {
                 this.ocisti(sel);
                     p.json().then(zanrovi=>{
-                        console.log(zanrovi);
+                        // console.log(zanrovi);
                         zanrovi.forEach(i=>{
                             let op=document.createElement("option");
                             op.value=i.naziv;
-                            console.log(i);
+                            // console.log(i);
                             op.innerHTML=this.IzBrojaUZanr(i.naziv);
                             sel.appendChild(op);
                         });
@@ -445,11 +467,10 @@ export class Prodavnica{
 
     prikaziprodavce()
     {
-        let m=this.kont.querySelector(".tabelaRadnici");
+        let a=this.kont.querySelector(".tabelaRadnici");
         let p=this.kont.querySelector(".PRODAVNICA");
         p=p.innerHTML;
         let q;
-        let qlist=[];
         fetch("https://localhost:5001/Prodavac/PrikaziProdavca/"+ p,
         {
             method:"GET",
@@ -458,25 +479,85 @@ export class Prodavnica{
             if(p.ok)
             {                
             p.json().then(prodavci=>{
-                prodavci.forEach(p=>{
-                    q=new Prodavac(p.ime, p.prezime, p.brojtelefona, p.licnakarta);
-                    
-                    qlist.push(q);
-                    // q.crtajProdavca(m);
-                });
-                console.log(qlist);
-            })
-            
-         }
 
-        })
+                if(prodavci.length===0)
+                    alert("Nema radnika u prodavnici");
+
+                else{
+                    // let body=this.OcistiTablicu();
+                    prodavci.forEach(p=>{
+                        // console.log(p);
+
+                    q=new Prodavac(p.ime, p.prezime, p.brojTelefona, p.licnaKarta);
+                    console.log(q);
+                    q.crtajProdavca(a);
+                })
+                // this.OtvoriTabelu();
+                // console.log(qlist);
+            }
+            
+         })
+
+        }
         // qlist.forEach(k=>{
-        //     k.crtajProdavca(m);
+        //     k.crtaj(m);
         //     console.log(1);
         // })
             
+    })
     }
+    NacrtajTablicu()
+    {
+        
+        let divTabela=this.kontejner.querySelector(".tabelaRadnici");
+        console.log(divTabela);
+        let tabela=document.createElement("table");
+        tabela.className="Tablica";
+        divTabela.appendChild(tabela);
 
+        var head=document.createElement("thead");
+        tabela.appendChild(head);
+
+        var tr=document.createElement("tr");
+        head.appendChild(tr);
+
+        var body=document.createElement("tbody");
+        body.className="Telo";
+        tabela.appendChild(body);
+
+        let td;
+        var niz=["Ime","Prezime","Broj telefona","Licna karta"];
+        niz.forEach(i=>{
+            td=document.createElement("td");
+            td.innerHTML=i;
+            head.appendChild(td);
+            console.log(td);
+        });
+
+        
+      }
+    
+    // OtvoriTabelu()
+    // {
+        
+    //     let divTabela=this.kontejner.querySelector(".tabelaRadnici");
+    //     if( divTabela.style.display=='block')
+    //        divTabela.style.display='none';
+    //     else
+    //     divTabela.style.display='block';
+        
+     
+        
+    // }
+    // OcistiTablicu(host)
+    // {
+    //     let divTabela=this.kont.querySelector(".TABELA");
+    //     let t=divTabela.querySelector(".Telo");
+    //     while(t.firstChild)
+    //         t.removeChild(t.lastChild);
+    //     return t;
+        
+    // }
     
 
 

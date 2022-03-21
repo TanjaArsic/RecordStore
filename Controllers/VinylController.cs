@@ -37,6 +37,43 @@ namespace wyyybbb.Controllers
             return Ok(Context.Ploce);
         }
 
+        // [Route("PreuzmiZanr")]
+        // [HttpGet]
+        // public ActionResult PreuzmiZanr()
+        // {
+        //     return Ok(Context.Ploce.Zanr);
+        // }
+
+
+        // [EnableCors("CORS")]
+        // [Route("PreuzmiZanrove")]
+        // [HttpGet]
+        // public async Task<ActionResult> PreuzmiZanrove()
+        // {
+        //     try
+        //     {
+                
+        //         var zanrovi = Context.Prodavnice.Include(p => p.ploce).Distinct().ToList();
+                
+        //            return Ok
+        //          (
+        //               zanrovi.Select(p=>
+        //                   new
+        //                   {
+        //                       naziv=p.Zanr
+                             
+
+        //               }).ToList();
+        //     })
+    
+
+        //     catch (Exception e)
+        //     {
+
+        //         return BadRequest(e.Message);
+        //     }
+        // }
+
 
         // [Route("PreuzmiLepo")]
         // [HttpGet]

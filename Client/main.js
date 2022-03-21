@@ -18,6 +18,10 @@ fetch("https://localhost:5001/Prodavnica/Prodavnica")
         sel.innerHTML="prodavnica";
         pocetni.appendChild(sel);
 
+        let kont=document.createElement("div");
+        kont.className="GlavniKontejner";
+        document.body.appendChild(kont);
+
 
 
         let op;
@@ -31,22 +35,22 @@ fetch("https://localhost:5001/Prodavnica/Prodavnica")
             op.className="Pocetna";
             sel.appendChild(op);
             listaProdavnica.push(p);
-           
+            op.addEventListener("click", function(){
+                // gKont.forEach(function(k){
+                //     alert("123");
+                //     k.removeChild(gKont.children[0]);
+                // });
+                sava.crtaj(kont,p.naziv);
+                
+                
+            })
         })
         let i=0;
        // console.log(listaProdavnica[0].naziv);
         let kakoosh=document.querySelectorAll(".Pocetna");
         // const gKont=document.querySelectorAll(".GlavniKontejner");
         kakoosh.forEach(function(a){
-            a.addEventListener("click", function(){
-                // gKont.forEach(function(k){
-                //     alert("123");
-                //     k.removeChild(gKont.children[0]);
-                // });
-                sava.crtaj(document.body,listaProdavnica[i].naziv);
-                i++;
-                
-            })
+            
         })    
     })
 

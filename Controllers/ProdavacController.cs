@@ -99,38 +99,38 @@ namespace wyyybbb.Controllers
                 return BadRequest(e.Message);
             }
         }
-        [Route("PromenitiBrojTelefonaProdavca/{ime}/{brojTelefona}")] //posebne podatke da promenimo
-        [HttpPut]
-        public async Task<ActionResult> Promeni(string ime, string brojTelefona)
-        {
+        // [Route("PromenitiBrojTelefonaProdavca/{ime}/{brojTelefona}")] //posebne podatke da promenimo
+        // [HttpPut]
+        // public async Task<ActionResult> Promeni(string ime, string brojTelefona)
+        // {
             
-            if(ime.Length > 50)
-            {
-                return BadRequest("Ime prodavca ne valja.");
-            }
-            try
-            {
-                var prodavac = Context.Prodavci.Where(p => p.Ime == ime).FirstOrDefault(); 
-                //vratiti prvog koji zadovoljava uslove ili null ako ne postoji
-                //var zakljuci sam
-                //var zamenjuje bilo koji tip
+        //     if(ime.Length > 50)
+        //     {
+        //         return BadRequest("Ime prodavca ne valja.");
+        //     }
+        //     try
+        //     {
+        //         var prodavac = Context.Prodavci.Where(p => p.Ime == ime).FirstOrDefault(); 
+        //         //vratiti prvog koji zadovoljava uslove ili null ako ne postoji
+        //         //var zakljuci sam
+        //         //var zamenjuje bilo koji tip
 
-                if (prodavac != null)
-                {
-                    prodavac.BrojTelefona = brojTelefona;
+        //         if (prodavac != null)
+        //         {
+        //             prodavac.BrojTelefona = brojTelefona;
 
-                    await Context.SaveChangesAsync(); //salju se promene u bazu podataka
-                    return Ok($"Uspešno promenjen broj telefona prodavca! ID: {prodavac.ID}");
-                }
-                else
-                {
-                    return BadRequest("Prodavac nije pronađena!");
-                }
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message); 
-            }
-        }
+        //             await Context.SaveChangesAsync(); //salju se promene u bazu podataka
+        //             return Ok($"Uspešno promenjen broj telefona prodavca! ID: {prodavac.ID}");
+        //         }
+        //         else
+        //         {
+        //             return BadRequest("Prodavac nije pronađena!");
+        //         }
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         return BadRequest(e.Message); 
+        //     }
+        // }
     }
 }
