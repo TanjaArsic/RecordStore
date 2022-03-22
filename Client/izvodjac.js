@@ -6,15 +6,15 @@ export class Izvodjac{
 
     }
     dodajIzvodjaca(){
-    fetch("https://localhost:5001//Izvodjac/DodajIzvodjacaAkoNePostoji/" + p,
-    {
-        method: "POST",
+        fetch("https://localhost:5001/Izvodjac/DodajIzvodjacaAkoNePostoji/" + p,
+        {
+            method: "POST",
 
-    }).then(p => {
-        if(p==null) alert("Molimo unesite ime izvodjaca!");
-        else (p.ok) 
-        alert("Uspešno ste dodali izvodjaca!");   
-        
-    });
+        }).then(p => {
+            if(p==null) alert("Molimo unesite ime izvodjaca!");
+            else (p.ok) 
+            alert("Uspešno ste dodali izvodjaca!");   
+            
+        });
     }       
 }

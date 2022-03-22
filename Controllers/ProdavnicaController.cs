@@ -46,34 +46,12 @@ namespace wyyybbb.Controllers
             }
         }
 
-       [Route("PP")]
-       [HttpGet]
-        public async Task<ActionResult> DajProdavnice()//Dobar
-        {
-            try
-            {
-                return Ok(await Context.Prodavnice
-                .Include(p=>p.ploce)
-                .Select(p =>
-                new
-                {
-                    ID = p.ID,
-                    Naziv = p.Naziv,
-                    Adresa=p.Adresa,
-                    Mail=p.Mail,
-                    Ploce = p.ploce
-                }).ToListAsync());
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
+    
 
         [EnableCors("CORS")]
         [Route("Prodavnica+Ploce/{idProdavnice}")]
         [HttpGet]
-        public async Task<ActionResult> ProdavnicaiPloce(string idProdavnice)
+        public async Task<ActionResult> ProdavnicaiPloce(string idProdavnice) //dobaaaaaaaaaaaar
         {
             try
             {
@@ -103,7 +81,7 @@ namespace wyyybbb.Controllers
 
 
 
-        [Route("DodajProdavnicuSVE")]
+        [Route("DodajProdavnicuSVE")] //dobaaaaaaaaaaaar
         [HttpPost]
         public async Task<ActionResult> DodajShop([FromBody] Prodavnica prodavnica) //cela ploca!!
         {
@@ -136,67 +114,7 @@ namespace wyyybbb.Controllers
         }
 
 
-        [Route("PrikaziZanrove/{ImeProdavnice}")]
-        [HttpGet]
-        public async Task<ActionResult> PreuzmiZanrove(string ImeProdavnice)
-        {
-            try
-            {
-            
-            
-                 var prod =await  Context.Prodavnice.Include(p => p.ploce).ThenInclude(p=>p.ploca).Where(p => p.Naziv == ImeProdavnice).FirstOrDefaultAsync();
-                 var prodzanr= prod.ploce.Select(q => q.ploca).ToList();
-                 var zanrovi=prodzanr.Distinct().ToList();
-                
-                   return Ok
-                 (
-                      zanrovi.Select(p=>
-                          new
-                          {
-                              naziv=p.Zanr
-                             
-
-                      }).ToList()
-                 );
-
-                 
-            
-            }
-
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-        
-
-        [Route("DodajProdavnicu/{ime}")]
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> DodajProdavnicu(string ime)
-        {
-            if (string.IsNullOrWhiteSpace(ime))
-            {
-                return BadRequest("Pogrešno ime prodavnice!");
-            }
-
-            try
-            {
-                Prodavnica prodavnica = new Prodavnica
-                {
-                    Naziv = ime
-                };
-
-                Context.Prodavnice.Add(prodavnica);
-                await Context.SaveChangesAsync();
-                return Ok("Uspešno kreirana prodavnica!");
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
+       
 
 
         [Route("IzbrisiProdavnicu")]

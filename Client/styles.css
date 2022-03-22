@@ -3,12 +3,12 @@
     font-style: oblique;
     color: rgb(231, 177, 40);
     font-size: 20px;
-    flex-grow: 0 1 auto;
+    /* flex-grow: 0 1 auto; */
   
 }
 
 .PocetniDIV{
-    font-style: arial;
+    font-family: Arial, Helvetica, sans-serif;
     color: goldenrod;
     text-align: center;
     font-size: 20px;
@@ -16,7 +16,7 @@
     align-items: center;
     width: 250px;
     height: 48px;
-    flex-grow: 0 1 auto;
+    /* flex-grow: 0 1 auto; */
     /* align-self:center; */
     /* justify-content: flex-start; */
     margin: 20px;
@@ -67,7 +67,7 @@ body {
     color: rgb(255, 255, 255);
     font-size: 90px;
     /* margin: 100px; */
-    flex-grow: 0 1 auto;
+    /* flex-grow: 0 1 auto; */
     /* text-align: center; */
     /* position: relative; */
   
@@ -109,7 +109,27 @@ body {
     position: relative;
     align-items:stretch;
     display:flex;
+    flex-direction: row;
     flex-grow: 20px 10px;
+}
+
+.RadForma{
+    
+    margin:10px;
+    display:flex;
+    flex-direction: row;
+    background-color: #303030;
+}
+.nekidivrad{
+    margin: 10px;
+
+}
+
+.btnrad{
+    background-color: #daa520;
+    padding: 5px;
+    margin: 5px;
+    margin-left: 10px;
 }
 
 .InputiForma{
@@ -122,6 +142,9 @@ body {
 {
   width:170px;
   height:170px;
+  /* background-image: url('/Client/vin.png'); */
+  background-size: cover;
+  
   /* border-radius:90%; */
   background: rgba(119, 116, 115, 0.5);
   border:3px solid rgb(92, 85, 85);
@@ -143,16 +166,26 @@ body {
     text-align: center;
     vertical-align: middle;
     line-height: 30px;
+    transition: 0.2s;
+    cursor: pointer;
     
 }
 
 .jedanvinyl:hover{
     background-color: black;
+      background-image: url('/Client/vin.png');
+      background-size: cover;
+      
+
     
 }
 .lab1
 {
     color:goldenrod;
+    font-size: 18px;
+    font-weight: bold;
+    /* -webkit-text-stroke: 1px white; */
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 
 }
 .Forma{
@@ -162,8 +195,13 @@ body {
     position: relative;
     border-radius: 25px;
     height: fit-content;
-    width: 155px;
+    width: 160px;
     padding: 30px;
+    display: flex;
+    margin-left: 20px;
+    justify-content: space-evenly;
+    flex-direction: column;
+    position:relative;
 
     
     /* flex: auto; */
@@ -180,11 +218,25 @@ body {
 
 }
 
+.pesmeeee{
+    /* z-index: 999; */
+    display: none;
+    transition: 0.2s;
+}
+
+.jedanvinyl:hover ~ .pesmeeee{
+    display: block;
+    color: white;
+
+}
+
 .VELIKIDIV{
     display:flex;
     /* flex-wrap: wrap; */
     position: relative;
     /* flex-direction:column; */
+
+    justify-content: center;
 
 }
 
@@ -254,12 +306,27 @@ body {
     background-color: black;
     
   }
+  .RADNICI{
+      margin-top: 100px;
+      margin-bottom: 100px;
+      
+  }
 
   .tabelaRadnici{
       background-color: black;
-      border: 1px solid grey;
+      color:white;
+      font-style: oblique;
+      color: rgb(231, 177, 40);
+      font-size: 40px;
+      ;
+      flex-grow: 0 1 auto;
+      border: 1px;
       margin:10px;
       border-radius: 10px;
+      /* position: center; */
+      justify-content: center;
+      align-items: center;
+
 
   }
 
@@ -304,3 +371,42 @@ td
     margin: 1px;
     padding: 3px;
 }
+
+
+
+
+
+@media only screen and (max-width: 600px) {
+    .navbar {
+      flex-direction: column;
+    }
+
+    .VELIKIDIV{
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
+    }
+
+    .RadForma{
+        flex-direction: column;
+    }
+    .nekidivrad{
+        flex-direction: column;
+    }
+
+    .Forma{
+        margin-left: 0px;
+    }
+
+    .PocetniDIV{
+        margin-left: 0px;
+
+    }
+
+   
+   
+
+  }
+
+
+  

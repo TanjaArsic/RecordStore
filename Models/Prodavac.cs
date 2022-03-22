@@ -19,6 +19,7 @@ namespace Models
         [MaxLength(10)]
         public string BrojTelefona { get; set; }
 
+        [MaxLength(9)]
         public int LicnaKarta { get; set; }
 
         public Smena RadnoVreme { get; set; }

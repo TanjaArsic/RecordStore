@@ -9,21 +9,6 @@ export class Prodavac{
         
     }
 
-    crtajTabelu(host){
-        let tabela=document.createElement("table");
-        tabela.className="tabela";
-        host.appendChild(tabela);
-
-        let tabelahead=document.createElement("thead");
-        tabelahead=["Ime", "Prezime", "Broj telefona", "Lična karta", "Obriši"];
-        console.log(tabelahead);
-        tabela.appendChild(tabelahead);
-
-        this.crtajProdavca(tabela);
-
-
-
-    }
 
     crtajProdavca(host){
 

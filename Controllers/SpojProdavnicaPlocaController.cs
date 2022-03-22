@@ -71,7 +71,7 @@ namespace wyyybbb.Controllers
         
         // //////////////////////////////////////////////POST////////////////////////////////////////////////
 
-        [Route("DodajPlocu/{nazivProdavnice}/{nazivPloce}/{izvodjac}/{godinastampanja}/{zanr}/{pesme}/{cena}")]
+        [Route("DodajPlocu/{nazivProdavnice}/{nazivPloce}/{izvodjac}/{godinastampanja}/{zanr}/{pesme}/{cena}")] //dobaaaaaaaaaaaar
         [HttpPost]
         public async Task<ActionResult> DodajPlocu([FromRoute]string nazivProdavnice, string nazivPloce, string izvodjac, int godinastampanja, Zanr zanr, string pesme, int cena) //cela ploca!!
         {
@@ -94,6 +94,10 @@ namespace wyyybbb.Controllers
             {
                 return BadRequest("Niste uneli pesme!");
             }
+            if(cena<0)
+            {
+                return BadRequest("Cena nije validna!");
+            }
 
 
             var prodavnica = await Context.Prodavnice
@@ -109,10 +113,6 @@ namespace wyyybbb.Controllers
             // .Select(p=>p.ID)
             .FirstOrDefaultAsync();
 
-            // var iz = await Context.IzdavackeKuce
-            // .Where(p=> p.Ime == izdavackaKuca)
-            // // .Select(p=>p.ID)
-            // .FirstOrDefaultAsync();
 
             try
             {

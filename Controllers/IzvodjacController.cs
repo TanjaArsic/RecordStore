@@ -55,7 +55,7 @@ namespace wyyybbb.Controllers
         //     }
         // }
 
-        [Route("DodajIzvodjacaAkoNePostoji/{Ime}")]
+        [Route("DodajIzvodjacaAkoNePostoji/{Ime}")] //dobaaaaaaaaaaaar
         [HttpPost]
         public async Task<ActionResult> DodajIzvodjaca(string Ime)
         {
@@ -120,7 +120,7 @@ namespace wyyybbb.Controllers
             }
         }
 
-        [Route("IzbrisiIzvodjaca")]
+        [Route("IzbrisiIzvodjaca")] //dobaaaaaaaaaaaar
         [HttpDelete]
         public async Task<ActionResult> IzbrisatiIzvodjaca(int id)
         {

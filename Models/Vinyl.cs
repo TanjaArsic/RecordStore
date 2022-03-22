@@ -23,7 +23,7 @@ namespace Models
         [MaxLength(50)]
         public string Ime { get; set; }
        
-
+        [JsonIgnore]
         public Zanr Zanr{ get; set; }
 
         public string Pesme { get; set; } // 1.Time 2.Money 
