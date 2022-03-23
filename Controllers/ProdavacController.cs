@@ -142,7 +142,7 @@ namespace wyyybbb.Controllers
                 var prodavac = await Context.Prodavci.FindAsync(id);
                 Context.Prodavci.Remove(prodavac);
                 await Context.SaveChangesAsync();
-                return Ok($"Uspešno otpušten prodavac {prodavac.Ime} {prodavac.Prezime}");
+                return Ok($"Uspešno otpusten prodavac {prodavac.Ime} {prodavac.Prezime}");
             }
             catch (Exception e)
             {

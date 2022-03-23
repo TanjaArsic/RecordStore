@@ -10,8 +10,8 @@ using Models;
 namespace wyyybbb.Migrations
 {
     [DbContext(typeof(VinylContext))]
-    [Migration("20220323024102_v10")]
-    partial class v10
+    [Migration("20220323103447_v18")]
+    partial class v18
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -59,9 +59,6 @@ namespace wyyybbb.Migrations
                     b.Property<string>("Prezime")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("RadnoVreme")
-                        .HasColumnType("int");
 
                     b.Property<int?>("prodavnicaID")
                         .HasColumnType("int");

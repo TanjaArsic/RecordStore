@@ -19,8 +19,3 @@ public enum Zanr
     Džez_fusion
     }
 
-public enum Smena
-{
-    Prepodne,
-    Popodne
-}

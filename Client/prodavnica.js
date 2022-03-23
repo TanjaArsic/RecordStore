@@ -42,40 +42,52 @@ export class Prodavnica {
 
         
         if(pl=="Dodaj!"){
+            if (q3 < 1930 || q3 > 2022){ alert("Molimo unesite validnu godinu štampanja ploče!"); return;}
+            
+            if (q5 < 0){ alert("Unesite validnu cenu ploče!"); return;}
+            
+            if (q6 < 1) {alert("Kolicina ploča ne moze biti 0!"); return;}
+            
+
         fetch("https://localhost:5001/SpojProdavnicaPloca/DodajPlocu/" + p + "/" + q + "/" + q1 + "/" + q3 + "/" + zanr + "/" + q4 + "/" + q5 + "/" + q6,
             {
                 method: "POST",
 
             }).then(p => {
-                if (q3 < 1930 || q3 > 2022) alert("Molimo unesite validnu godinu štampanja ploče!");
-                if (q5 < 0) alert("Unesite validnu cenu ploče!");
-                if (q6 < 1) alert("Kolicina ploča ne moze biti 0!");
+               
 
+                if (p.ok){
+                    let m = this.kont.querySelector(".PlocaTabela");
+                    this.prikaziploce(m);
 
-                if (p.ok)
                     alert("Uspešno ste dodali ploču!");
+                }
+
                 else alert("Neuspešno dodavanje ploče!")
 
             });
+            
+            
         }
         else if(pl=="Izmeni"){
             // const idd=this.kont.querySelector(".nazivploce").value;
             // console.log(idd);
-            
+            if(q5==null) {alert ("Promenite cenu"); return;}
 
-            fetch("https://localhost:5001/Vinyl/IzmeniCenuPloce/" + q + "/" + q + "/" + q5,
+            fetch("https://localhost:5001/Vinyl/IzmeniCenuPloce/" + q + "/" + q1 + "/" + q5,
             {
                 method: "PUT",
         
             }).then(p => {
-                if(q5==null) alert ("Promenite cenu");
                 if (p.ok) {
+                    
+                let m = this.kont.querySelector(".PlocaTabela");
+                this.prikaziploce(m);
                 alert("Uspesno promenjena cena!");  
                 }
                 else alert("Greska u promeni cene");
             }) 
             
-    
         }
     }
 
@@ -96,22 +108,22 @@ export class Prodavnica {
         let q3 = this.kont.querySelector(".licnakartaprodavca");
         q3 = q3.value;
 
-
+        if (q === "") {alert("Molimo unesite ime prodavca!"); return;}
+        if (q1 === "") {alert("Molimo unesite prezime prodavca!"); return;}
+        if (q2.length > 10 || q2.length < 9) {alert("Molimo unesite validan broj telefona prodavca!"); return;}
+        if (q3.toString().length != 9) {alert("Molimo unesite validan broj lične karte prodavca!"); return;}
 
         fetch("https://localhost:5001/Prodavac/DodajProdavca/" + p + "/" + q + "/" + q1 + "/" + q3 + "/" + q2,
             {
                 method: "POST",
 
             }).then(p => {
-                if (q === "") alert("Molimo unesite ime prodavca!");
-                if (q1 === "") alert("Molimo unesite prezime prodavca!");
-                if (q2.length > 10 || q2.length < 9) alert("Molimo unesite validan broj telefona prodavca!");
-                if (q3.toString().length != 9) alert("Molimo unesite validan broj lične karte prodavca!");
+                
 
                 if (p.ok)
                     alert("Uspešno ste zaposlili prodavca!");
                 else alert("Neuspešno zaposlen prodavac!")
-                let br = this.prikaziprodavce();
+                this.prikaziprodavce();
 
 
             });
@@ -259,6 +271,7 @@ export class Prodavnica {
         this.crtajLabelu(nekidiv, "Količina: ");
         input = document.createElement("input");
         input.type= "number";
+        input.min="0";
         input.className = "kolicinaploce";
         nekidiv.appendChild(input);
 
@@ -268,9 +281,9 @@ export class Prodavnica {
         btn.innerHTML = "Dodaj!";
         btn.className = "btn";
         nekidiv.appendChild(btn);
-        let m = this.kont.querySelector(".PlocaTabela");
+        // let m = this.kont.querySelector(".PlocaTabela");
         
-        btn.onclick = (ev) => {this.dodajiliIzmeniPlocu(btn.innerHTML); this.prikaziploce(m); this.crtajFormu(kontForma);}
+        btn.onclick = (ev) => {this.dodajiliIzmeniPlocu(btn.innerHTML);  this.crtajFormu(kontForma);}
         // btn.onclick = (ev) => this.prikaziploce();
 
         // nekidiv=this.crtajDiv(kontForma);
@@ -329,6 +342,7 @@ export class Prodavnica {
         // document.querySelector(".PlocaTabela").innerHTML = "";
         let p = this.kont.querySelector(".PRODAVNICA");
         p = p.innerHTML;
+        
         let qlist = [];
         let q;
         let i = 0;
@@ -370,6 +384,8 @@ export class Prodavnica {
 
         n = host.querySelector(".pesmeploce");
         n.value = el.pesme;
+        n = host.querySelector(".selektZanra");
+        n.value = el.zanr;
         n = host.querySelector(".cenaploce");
         n.value = el.cena;
         n = host.querySelector(".kolicinaploce");
@@ -405,6 +421,7 @@ export class Prodavnica {
             op.innerHTML = this.IzBrojaUZanr(i);
             sel.appendChild(op);
         }
+        // GET "https://localhost:5001/Vinyl/VratiZanrove?podatak=1&podatak=2&podatak=3&podatak=4&podatak=5&podatak=6&podatak=7&podatak=8&podatak=9&podatak=10&podatak=11&podatak=12&podatak=13&podatak=14&podatak=15&podatak=16"
         
     }
 
@@ -418,31 +435,6 @@ export class Prodavnica {
         console.log(l);
     }
 
-    // crtajPloce(host) {//////niedobro
-    //     this.kont = document.createElement("div");
-    //     this.kont.className = "GomilaPloca";
-    //     host.appendChild(this.kont);
-
-    //     var button = document.createElement("button");
-    //     button.innerHTML = "Do Something";
-
-    //     host = document.getElementsByTagName("body")[0];
-    //     host.appendChild(button);
-
-    //     // 3. Add event handler
-    //     button.addEventListener("click", function () {
-    //         alert("did something");
-    //     });
-    //     const BtnAdd = document.querySelector(".btn.add");
-    //     BtnAdd.addEventListener("click", dodajiliIzmeniPlocu);
-
-    //     function dodajiliIzmeniPlocu() {
-    //         const newDiv = document.createElement("div");
-    //         console.log("add");
-
-    //     }
-
-    // }
 
 
     IzZanraUBroj(zanr) {
@@ -587,7 +579,6 @@ export class Prodavnica {
         tabela.appendChild(body);
 
 
-
         let td;
         var niz = ["Ime", "Prezime", "Broj telefona", "Lična karta"];
         niz.forEach(i => {
@@ -602,35 +593,6 @@ export class Prodavnica {
 
     }
 
-    // OtvoriTabelu()
-    // {
-
-    //     let divTabela=this.kontejner.querySelector(".tabelaRadnici");
-    //     if( divTabela.style.display=='block')
-    //        divTabela.style.display='none';
-    //     else
-    //     divTabela.style.display='block';        
-    // }
-    // OcistiTablicu(host) {
-    //     let divTabela = this.kont.querySelector(".RADNICI");
-    //     let t = divTabela.querySelector(".Telo");
-       
-    //     while (t.firstChild)
-    //         t.removeChild(t.lastChild);
-
-    //     return t;
-
-    // }
-    // OcistiTablicu1(host) {
-    //     let divTabela1 = this.kont.querySelector(".RADNICI");
-
-    //     let h = divTabela1.querySelector(".thead");
-    //     while (h.firstChild)
-
-    //         h.removeChild(h.lastChild);
-    //     return h;
-
-    // }
 
 
 

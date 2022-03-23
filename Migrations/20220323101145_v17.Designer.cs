@@ -10,8 +10,8 @@ using Models;
 namespace wyyybbb.Migrations
 {
     [DbContext(typeof(VinylContext))]
-    [Migration("20220319015258_v5")]
-    partial class v5
+    [Migration("20220323101145_v17")]
+    partial class v17
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,26 +20,6 @@ namespace wyyybbb.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.12")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("Models.IzdavackaKuca", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Ime")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Website")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("IzdavackeKuce");
-                });
 
             modelBuilder.Entity("Models.Izvodjac", b =>
                 {
@@ -73,6 +53,7 @@ namespace wyyybbb.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("LicnaKarta")
+                        .HasMaxLength(9)
                         .HasColumnType("int");
 
                     b.Property<string>("Prezime")
@@ -165,15 +146,10 @@ namespace wyyybbb.Migrations
                     b.Property<int>("Zanr")
                         .HasColumnType("int");
 
-                    b.Property<int?>("izdavackaKucaID")
-                        .HasColumnType("int");
-
                     b.Property<int?>("izvodjacID")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("izdavackaKucaID");
 
                     b.HasIndex("izvodjacID");
 
@@ -206,22 +182,11 @@ namespace wyyybbb.Migrations
 
             modelBuilder.Entity("Models.Vinyl", b =>
                 {
-                    b.HasOne("Models.IzdavackaKuca", "izdavackaKuca")
-                        .WithMany("ploce")
-                        .HasForeignKey("izdavackaKucaID");
-
                     b.HasOne("Models.Izvodjac", "izvodjac")
                         .WithMany("ploce")
                         .HasForeignKey("izvodjacID");
 
-                    b.Navigation("izdavackaKuca");
-
                     b.Navigation("izvodjac");
-                });
-
-            modelBuilder.Entity("Models.IzdavackaKuca", b =>
-                {
-                    b.Navigation("ploce");
                 });
 
             modelBuilder.Entity("Models.Izvodjac", b =>

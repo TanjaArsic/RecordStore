@@ -38,28 +38,28 @@ namespace wyyybbb.Controllers
         }
     
 
-        [Route("IzmeniCenuPloce/{naziv}/{izvodjac}/{cena}")] //dobaaaaaaaaaaaar
+        [Route("IzmeniCenuPloce/{naziv}/{izvodjac}/{cena}")] //
         [HttpPut]
-        public async Task<ActionResult> IzmeniPlocu(string naziv, string izvodjac, int cena)
+        public async Task<ActionResult> IzmeniPlocu(string naziv, string izvodjac, int cena)//
         {
-            try
+        
+            var vinyl = await Context.Ploce
+            .Where(p => p.Ime == naziv)
+            .FirstOrDefaultAsync();
+
+            var iz = await Context.Izvodjaci
+            .Where(p => p.Ime == izvodjac)
+            .FirstOrDefaultAsync();
+
+            if (vinyl == null) 
+            
+                return BadRequest("Ploca ne postoji.");
+
+            if(izvodjac==null)
+
+                return BadRequest("Izvodjac ne postoji.");
+         try
             {
-                var vinyl = await Context.Ploce
-                .Where(p => p.Ime == naziv)
-                .FirstOrDefaultAsync();
-
-                var iz = await Context.Izvodjaci
-                .Where(p => p.Ime == izvodjac)
-                .FirstOrDefaultAsync();
-
-                if (vinyl == null) 
-                
-                    return BadRequest("Ploca ne postoji.");
-
-                if(izvodjac==null)
-
-                    return BadRequest("Izvodjac ne postoji.");
-
                 var pp = await Context.ProdavnicaPloca
                 .Where(p => p.ploca == vinyl)
                 .ToListAsync();
@@ -80,28 +80,29 @@ namespace wyyybbb.Controllers
                 return BadRequest(e.Message);
             }
         }
-        [Route("SmanjiKolicinuPloce/{naziv}/{izvodjac}")] //dobaaaaaaaaaaaar
+        [Route("SmanjiKolicinuPloce/{naziv}/{izvodjac}")] //
         [HttpPut]
         public async Task<ActionResult> SmanjiKolicinuPlocu(string naziv, string izvodjac)
         {
+           
+            var vinyl = await Context.Ploce
+            .Where(p => p.Ime == naziv)
+            .FirstOrDefaultAsync();
+
+            var iz = await Context.Izvodjaci
+            .Where(p => p.Ime == izvodjac)
+            .FirstOrDefaultAsync();
+
+            if (vinyl == null) 
+            
+                return BadRequest("Ploca ne postoji.");
+
+            if(izvodjac==null)
+
+                return BadRequest("Izvodjac ne postoji.");
+
             try
             {
-                var vinyl = await Context.Ploce
-                .Where(p => p.Ime == naziv)
-                .FirstOrDefaultAsync();
-
-                var iz = await Context.Izvodjaci
-                .Where(p => p.Ime == izvodjac)
-                .FirstOrDefaultAsync();
-
-                if (vinyl == null) 
-                
-                    return BadRequest("Ploca ne postoji.");
-
-                if(izvodjac==null)
-
-                    return BadRequest("Izvodjac ne postoji.");
-
                 var pp = await Context.ProdavnicaPloca
                 .Where(p => p.ploca == vinyl)
                 .ToListAsync();
@@ -123,23 +124,32 @@ namespace wyyybbb.Controllers
             }
         }
 
+
+        [Route("VratiZanrove")]
+        [HttpGet]
+        public async Task<ActionResult> PreuzmiZanrove([FromQuery] int[] podatak)
+        {
+            return Ok(podatak);
+        }
+
      
         ////////////////////////////////////////////////DELETE/////////////////////////////////////////////////
 
-        [Route("ObrisiPlocu/{id}")] //dobaaaaaaaaaaaar
+        [Route("ObrisiPlocu/{id}")] //
         [HttpDelete]
         public async Task<ActionResult> ObrisiPlocu(int id)
         {
+            
+            var vinyl = await Context.Ploce
+            .Where(p => p.ID == id)
+            .FirstOrDefaultAsync();
+
+            if (vinyl == null) 
+            
+                return BadRequest("Ploca ne postoji.");
+                
             try
             {
-                var vinyl = await Context.Ploce
-                .Where(p => p.ID == id)
-                .FirstOrDefaultAsync();
-
-                if (vinyl == null) 
-                
-                    return BadRequest("Ploca ne postoji.");
-
                 var pp = await Context.ProdavnicaPloca
                 .Where(p => p.ploca == vinyl)
                 .ToListAsync();
@@ -158,9 +168,62 @@ namespace wyyybbb.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        // [Route("PronadjiPlocu/{naziv}/{izvodjac}")] 
+        // [HttpGet]
+        // public async Task<ActionResult> PronadjiPlocu(string naziv, string izvodjac)
+        // {
+            
+        //         var vinyl = await Context.Ploce
+        //         .Where(p => p.Ime == naziv)
+        //         .FirstOrDefaultAsync();
+
+        //         var iz = await Context.Izvodjaci
+        //         .Where(p => p.Ime == izvodjac)
+        //         .FirstOrDefaultAsync();
+
+        //         if (vinyl == null) 
+                
+        //             return BadRequest("Ploca ne postoji.");
+
+        //         if(izvodjac==null)
+
+        //             return BadRequest("Izvodjac ne postoji.");
+
+        //         var pp = await Context.ProdavnicaPloca
+        //         .Where(p => p.ploca == vinyl)
+        //         .ToListAsync();
+
+        //         try
+        //         {
+        //         var prod = await Context.ProdavnicaPloca
+        //         .Where(p => p.ploca == vinyl)
+        //         .ToListAsync();
+        //         return Ok(prod.ploca.Select(q =>
+        //         new
+        //         {
+        //             Cena=q.Cena,
+        //             Kolicina=q.Kolicina,
+        //             Ploca=q.ploca,
+        //             Izvodjac=q.ploca.izvodjac,
+        //             Zanr=q.ploca.Zanr
+                    
+
+        //         }
+        //         )
+        //         );
+        //         }
+            
+        //     catch (Exception e)
+        //         {
+        //         return BadRequest(e.Message);
+        //         }
+        // }
+        }
+
     }
 
-}
+
 
 
 

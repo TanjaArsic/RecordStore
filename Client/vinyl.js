@@ -11,7 +11,6 @@ export class Vinyl {
         this.kolicina = kolicina;
         this.izvodjac = izvodjac
 
-
     }
     
 
@@ -39,8 +38,8 @@ export class Vinyl {
         obrisibtn.classList = "obrisibtn";
         obrisibtn.innerHTML = this.cena + "din.";
         obrisibtn.onclick = ev => {
-
-            this.deleteVinyl(this.id)
+            
+            this.deleteVinyl(miniCont)
             // let parent = miniCont.parentNode;
             // parent.removeChild(miniCont);
 
@@ -77,7 +76,7 @@ export class Vinyl {
         return id;
     }
 
-    deleteVinyl(id) {
+    deleteVinyl(miniCont) {
         let pare;
         pare = prompt("Unesite novac:", " ")
 
@@ -88,13 +87,14 @@ export class Vinyl {
 
         if(this.kolicina>1){
             this.kolicina=this.kolicina-1;
+        if(this.ime==null) {alert("ime je null"); return; }
+        if(this.izvodjac==null) {alert("izvodjac je null"); return; }
             fetch("https://localhost:5001/Vinyl/SmanjiKolicinuPloce/" + this.ime + "/" + this.izvodjac,
             {
                 method: "PUT",
         
             }).then(p => {
-                if(this.ime==null) alert("ime je null");
-                if(this.izvodjac==null) alert("izvodjac je null");
+                
                 if (p.ok) {
                 alert("Uspesno promenjena kolicina!");  
                 }
@@ -104,11 +104,12 @@ export class Vinyl {
         }
 
         else if(this.kolicina<1){
-            return alert ("WTF");
+            alert ("WTF");
+            return;
         }
         else{
-
-        fetch("https://localhost:5001/Vinyl/ObrisiPlocu/" + id, {
+        
+        fetch("https://localhost:5001/Vinyl/ObrisiPlocu/" + this.id, {
             method: "DELETE",
         }).then(p => {
             if (p.ok) {
@@ -117,7 +118,7 @@ export class Vinyl {
                 // let miniCont = this.kont.querySelector(".jedanvinyl");
                 // let parent = miniCont.parentNode;
                 // parent.removeChild(miniCont);
-
+                miniCont.remove();
             }
         })
 

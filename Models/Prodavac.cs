@@ -22,8 +22,6 @@ namespace Models
         [MaxLength(9)]
         public int LicnaKarta { get; set; }
 
-        public Smena RadnoVreme { get; set; }
-
         public Prodavnica prodavnica { get; set; }
 
 

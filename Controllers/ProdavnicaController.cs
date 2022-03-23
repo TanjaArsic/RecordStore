@@ -49,11 +49,11 @@ namespace wyyybbb.Controllers
     
 
         [EnableCors("CORS")]
-        [Route("Prodavnica+Ploce/{idProdavnice}")]
+        [Route("Prodavnica+Ploce/{imeProdavnice}")]
         [HttpGet]
-        public async Task<ActionResult> ProdavnicaiPloce(string idProdavnice) //dobaaaaaaaaaaaar
+        public async Task<ActionResult> ProdavnicaiPloce(string imeProdavnice) //
         {
-            if(idProdavnice==null){
+            if(imeProdavnice==null){
                 return BadRequest("Prodavnica ne postoji");
             }
             try
@@ -62,7 +62,7 @@ namespace wyyybbb.Controllers
                 .Include(p=>p.ploce)
                 .ThenInclude(p=>p.ploca)
                 .ThenInclude(p=>p.izvodjac)
-                .Where(p=>p.Naziv==idProdavnice)
+                .Where(p=>p.Naziv==imeProdavnice)
                 .FirstOrDefaultAsync();
                 return Ok(prod.ploce.Select(q =>
                 new
@@ -86,7 +86,7 @@ namespace wyyybbb.Controllers
 
 
 
-        [Route("DodajProdavnicuSVE")] //dobaaaaaaaaaaaar
+        [Route("DodajProdavnicuSVE")] //
         [HttpPost]
         public async Task<ActionResult> DodajShop([FromBody] Prodavnica prodavnica) //cela ploca!!
         {
