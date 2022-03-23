@@ -13,7 +13,10 @@ public enum Zanr
     Alternativno,
     Funk,
     Grandž,
-    RnB
+    RnB,
+    Elektronska_muzika,
+    Soul, 
+    Džez_fusion
     }
 
 public enum Smena

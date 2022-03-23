@@ -31,6 +31,8 @@ export class Prodavnica {
         q4 = q4.value;
         let q5 = this.kont.querySelector(".cenaploce");
         q5 = q5.value;
+        let q6 = this.kont.querySelector(".kolicinaploce");
+        q6 = q6.value;
 
         let m = this.kont.querySelector(".selektZanra");
         let zanr = this.kont.querySelector("select").value;
@@ -38,25 +40,45 @@ export class Prodavnica {
         console.log(m);
         console.log(zanr);
 
-        // if(btn=="OK"){
-        fetch("https://localhost:5001/SpojProdavnicaPloca/DodajPlocu/" + p + "/" + q + "/" + q1 + "/" + q3 + "/" + zanr + "/" + q4 + "/" + q5,
+        
+        if(pl=="Dodaj!"){
+        fetch("https://localhost:5001/SpojProdavnicaPloca/DodajPlocu/" + p + "/" + q + "/" + q1 + "/" + q3 + "/" + zanr + "/" + q4 + "/" + q5 + "/" + q6,
             {
                 method: "POST",
 
             }).then(p => {
                 if (q3 < 1930 || q3 > 2022) alert("Molimo unesite validnu godinu štampanja ploče!");
                 if (q5 < 0) alert("Unesite validnu cenu ploče!");
+                if (q6 < 1) alert("Kolicina ploča ne moze biti 0!");
+
+
                 if (p.ok)
                     alert("Uspešno ste dodali ploču!");
                 else alert("Neuspešno dodavanje ploče!")
 
             });
+        }
+        else if(pl=="Izmeni"){
+            // const idd=this.kont.querySelector(".nazivploce").value;
+            // console.log(idd);
+            
 
-
-        // else if(btn=="Izmeni"){
-
-        // }
+            fetch("https://localhost:5001/Vinyl/IzmeniCenuPloce/" + q + "/" + q + "/" + q5,
+            {
+                method: "PUT",
+        
+            }).then(p => {
+                if(q5==null) alert ("Promenite cenu");
+                if (p.ok) {
+                alert("Uspesno promenjena cena!");  
+                }
+                else alert("Greska u promeni cene");
+            }) 
+            
+    
+        }
     }
+
     dodajProdavca(pl) {
         let p = this.kont.querySelector(".PRODAVNICA");
         p = p.innerHTML;
@@ -89,6 +111,8 @@ export class Prodavnica {
                 if (p.ok)
                     alert("Uspešno ste zaposlili prodavca!");
                 else alert("Neuspešno zaposlen prodavac!")
+                let br = this.prikaziprodavce();
+
 
             });
 
@@ -157,18 +181,28 @@ export class Prodavnica {
         PlocaTabela.className = "PlocaTabela";
         VelikiDiv.appendChild(PlocaTabela);
 
-        let deoZaRadnike = document.createElement("div");
-        deoZaRadnike.className = "RADNICI";
-        this.kont.appendChild(deoZaRadnike);
+        let SVEZARADNIKE=document.createElement("div");
+        SVEZARADNIKE.className="SVEZARADNIKE";
+        this.kont.appendChild(SVEZARADNIKE);
+        
+        let deoZaRadnike0 = document.createElement("div");
+        deoZaRadnike0.className = "RADNICI0";
+        SVEZARADNIKE.appendChild(deoZaRadnike0);
 
         let tabelaRadnici = document.createElement("div");
         tabelaRadnici.className = "tabelaRadnici";
-        deoZaRadnike.appendChild(tabelaRadnici);
+        deoZaRadnike0.appendChild(tabelaRadnici);
         tabelaRadnici.innerHTML = "PRODAVCI";
 
         let RadForma = document.createElement("div");
         RadForma.className = "RadForma";
-        deoZaRadnike.appendChild(RadForma);
+        deoZaRadnike0.appendChild(RadForma);
+
+        let deoZaRadnike = document.createElement("div");
+        deoZaRadnike.className = "RADNICI";
+        SVEZARADNIKE.appendChild(deoZaRadnike);
+
+       
 
 
         this.crtajFormu(kontForma);
@@ -180,8 +214,9 @@ export class Prodavnica {
 
     crtajFormu(kontForma) {
 
-
+        kontForma.replaceChildren();
         let nekidiv = this.crtajDiv(kontForma);
+        // nekidiv.className("nekidiv");
         this.crtajLabelu(nekidiv, "Naziv: ");
         let input = document.createElement("input");
         input.className = "nazivploce";
@@ -213,6 +248,7 @@ export class Prodavnica {
         sel.name = "selektZanra";
         nekidiv.appendChild(sel);
 
+
         nekidiv = this.crtajDiv(kontForma);
         this.crtajLabelu(nekidiv, "Cena: ");
         input = document.createElement("input");
@@ -220,11 +256,22 @@ export class Prodavnica {
         nekidiv.appendChild(input);
 
         nekidiv = this.crtajDiv(kontForma);
+        this.crtajLabelu(nekidiv, "Količina: ");
+        input = document.createElement("input");
+        input.type= "number";
+        input.className = "kolicinaploce";
+        nekidiv.appendChild(input);
+
+
+        nekidiv = this.crtajDiv(kontForma);
         let btn = document.createElement("button");
-        btn.innerHTML = "OK";
+        btn.innerHTML = "Dodaj!";
         btn.className = "btn";
         nekidiv.appendChild(btn);
-        btn.onclick = (ev) => this.dodajiliIzmeniPlocu();
+        let m = this.kont.querySelector(".PlocaTabela");
+        
+        btn.onclick = (ev) => {this.dodajiliIzmeniPlocu(btn.innerHTML); this.prikaziploce(m); this.crtajFormu(kontForma);}
+        // btn.onclick = (ev) => this.prikaziploce();
 
         // nekidiv=this.crtajDiv(kontForma);
         // let btn1=document.createElement("button");
@@ -297,7 +344,7 @@ export class Prodavnica {
                         if (ploce.length === 0) alert("Nema ploča u prodavnici");
                         else {
                             ploce.forEach(i => {
-                                q = new Vinyl(i.ploca.id, i.ploca.ime, i.ploca.zanr, i.ploca.pesme, i.ploca.godinaStampanja, i.cena, i.kolicina, i.izvodjac);
+                                q = new Vinyl(i.ploca.id, i.ploca.ime, i.zanr, i.ploca.pesme, i.ploca.godinaStampanja, i.cena, i.kolicina, i.izvodjac);
                                 console.log(q);
                                 q.crtajVinyl(m,this.kont.querySelector(".Forma"))
                                 qlist.push(q);
@@ -325,6 +372,8 @@ export class Prodavnica {
         n.value = el.pesme;
         n = host.querySelector(".cenaploce");
         n.value = el.cena;
+        n = host.querySelector(".kolicinaploce");
+        n.value = el.kolicina;
 
         n=host.querySelector(".btn");
         n.innerHTML="Izmeni";
@@ -350,13 +399,13 @@ export class Prodavnica {
     }
 
     crtajSelect(sel) {
-        for (let i = 0; i < 14; i++) {
+        for (let i = 0; i < 17; i++) {
             let op = document.createElement("option");
             op.value = i;
             op.innerHTML = this.IzBrojaUZanr(i);
             sel.appendChild(op);
         }
-
+        
     }
 
     ocisti(l) {
@@ -369,31 +418,31 @@ export class Prodavnica {
         console.log(l);
     }
 
-    crtajPloce(host) {//////niedobro
-        this.kont = document.createElement("div");
-        this.kont.className = "GomilaPloca";
-        host.appendChild(this.kont);
+    // crtajPloce(host) {//////niedobro
+    //     this.kont = document.createElement("div");
+    //     this.kont.className = "GomilaPloca";
+    //     host.appendChild(this.kont);
 
-        var button = document.createElement("button");
-        button.innerHTML = "Do Something";
+    //     var button = document.createElement("button");
+    //     button.innerHTML = "Do Something";
 
-        host = document.getElementsByTagName("body")[0];
-        host.appendChild(button);
+    //     host = document.getElementsByTagName("body")[0];
+    //     host.appendChild(button);
 
-        // 3. Add event handler
-        button.addEventListener("click", function () {
-            alert("did something");
-        });
-        const BtnAdd = document.querySelector(".btn.add");
-        BtnAdd.addEventListener("click", dodajiliIzmeniPlocu);
+    //     // 3. Add event handler
+    //     button.addEventListener("click", function () {
+    //         alert("did something");
+    //     });
+    //     const BtnAdd = document.querySelector(".btn.add");
+    //     BtnAdd.addEventListener("click", dodajiliIzmeniPlocu);
 
-        function dodajiliIzmeniPlocu() {
-            const newDiv = document.createElement("div");
-            console.log("add");
+    //     function dodajiliIzmeniPlocu() {
+    //         const newDiv = document.createElement("div");
+    //         console.log("add");
 
-        }
+    //     }
 
-    }
+    // }
 
 
     IzZanraUBroj(zanr) {
@@ -425,6 +474,12 @@ export class Prodavnica {
             case "Grandž": return 12;
                 break;
             case "RnB": return 13;
+                break;
+            case "Elektronska_muzika": return 14;
+                break;
+            case "Soul": return 15;
+                break;
+            case "Džez_fusion": return 16;
                 break;
 
         }
@@ -460,7 +515,13 @@ export class Prodavnica {
                 break;
             case 13: return "RnB";
                 break;
-
+            case 14: return "Elektronska_muzika";
+                break;
+            case 15: return "Soul";
+                break;
+            case 16: return "Džez_fusion";
+                break;
+                
         }
     }
 
@@ -469,11 +530,10 @@ export class Prodavnica {
     prikaziprodavce() {
         // let lj=this.kont.querySelector(".tabelaRadnici"); //a je div u koji treba da stoji tablica 
         // lj.replaceChildren();
-
+        let br = this.kont.querySelector(".RADNICI");
+        br.replaceChildren();
         let a = this.NacrtajTablicu();
-        let slj = this.kont.querySelector(".tabelaRadnici"); //RADNICI
         let p = this.kont.querySelector(".PRODAVNICA");
-        this.ocisti(slj);
 
         p = p.innerHTML;
         let q;
@@ -489,7 +549,6 @@ export class Prodavnica {
                             alert("Nema radnika u prodavnici");
 
                         else {
-                            // let body=this.OcistiTablicu();
                             prodavci.forEach(p => {
                                 // console.log(p);
 
@@ -508,17 +567,19 @@ export class Prodavnica {
     }
     NacrtajTablicu() {
 
-        let divTabela = document.body.querySelector(".RADNICI");///
+        let divTabela = this.kont.querySelector(".RADNICI");///
 
         let tabela = document.createElement("table");
         tabela.className = "Tablica";
         divTabela.appendChild(tabela);
 
         var head = document.createElement("thead");
+        head.className="thead";
         tabela.appendChild(head);
 
         var tr = document.createElement("tr");
         head.appendChild(tr);
+        tabela.appendChild(head);
 
 
         var body = document.createElement("tbody");
@@ -550,14 +611,26 @@ export class Prodavnica {
     //     else
     //     divTabela.style.display='block';        
     // }
-    OcistiTablicu(host) {
-        let divTabela = this.kont.querySelector(".RADNICI");
-        let t = divTabela.querySelector(".Telo");
-        while (t.firstChild)
-            t.removeChild(t.lastChild);
-        return t;
+    // OcistiTablicu(host) {
+    //     let divTabela = this.kont.querySelector(".RADNICI");
+    //     let t = divTabela.querySelector(".Telo");
+       
+    //     while (t.firstChild)
+    //         t.removeChild(t.lastChild);
 
-    }
+    //     return t;
+
+    // }
+    // OcistiTablicu1(host) {
+    //     let divTabela1 = this.kont.querySelector(".RADNICI");
+
+    //     let h = divTabela1.querySelector(".thead");
+    //     while (h.firstChild)
+
+    //         h.removeChild(h.lastChild);
+    //     return h;
+
+    // }
 
 
 

@@ -71,9 +71,9 @@ namespace wyyybbb.Controllers
         
         // //////////////////////////////////////////////POST////////////////////////////////////////////////
 
-        [Route("DodajPlocu/{nazivProdavnice}/{nazivPloce}/{izvodjac}/{godinastampanja}/{zanr}/{pesme}/{cena}")] //dobaaaaaaaaaaaar
+        [Route("DodajPlocu/{nazivProdavnice}/{nazivPloce}/{izvodjac}/{godinastampanja}/{zanr}/{pesme}/{cena}/{kolicina}")] //dobaaaaaaaaaaaar
         [HttpPost]
-        public async Task<ActionResult> DodajPlocu([FromRoute]string nazivProdavnice, string nazivPloce, string izvodjac, int godinastampanja, Zanr zanr, string pesme, int cena) //cela ploca!!
+        public async Task<ActionResult> DodajPlocu([FromRoute]string nazivProdavnice, string nazivPloce, string izvodjac, int godinastampanja, Zanr zanr, string pesme, int cena, int kolicina) //cela ploca!!
         {
             if (string.IsNullOrWhiteSpace(nazivProdavnice) || nazivProdavnice.Length > 50)//bar jedan karakter
             {
@@ -82,7 +82,7 @@ namespace wyyybbb.Controllers
 
             if (string.IsNullOrWhiteSpace(nazivPloce) || nazivPloce.Length > 50)//bar jedan karakter
             {
-                return BadRequest("Pogrešno ime prodavnica!");
+                return BadRequest("Loše ime prodavnica!");
             }
 
             if (godinastampanja < 1930 || godinastampanja > 2022)
@@ -90,13 +90,17 @@ namespace wyyybbb.Controllers
                 return BadRequest("Uneti validnu godinu štampanja ploče!");
             }
 
-            if (string.IsNullOrWhiteSpace(pesme))
+            if (pesme==null)
             {
                 return BadRequest("Niste uneli pesme!");
             }
             if(cena<0)
             {
                 return BadRequest("Cena nije validna!");
+            }
+            if(kolicina<1)
+            {
+                return BadRequest("Kolicina nije validna!");
             }
 
 
@@ -113,6 +117,16 @@ namespace wyyybbb.Controllers
             // .Select(p=>p.ID)
             .FirstOrDefaultAsync();
 
+            
+            if(i==null){
+                var novi=new Izvodjac{
+                    Ime=izvodjac
+                };
+                i=novi;
+                Context.Izvodjaci.Add(i);
+                await Context.SaveChangesAsync();
+            }
+
 
             try
             {
@@ -126,14 +140,17 @@ namespace wyyybbb.Controllers
                 Context.Ploce.Add(Vinyl);
                 await Context.SaveChangesAsync();
 
+
                 var spoj = new SpojProdavnicaPloca{
                     Cena=cena,
-                    Kolicina=1,
+                    Kolicina=kolicina,
                     ploca=Vinyl,
                     prodavnica=prodavnica
                 };
                 Context.ProdavnicaPloca.Add(spoj);
                 await Context.SaveChangesAsync();
+
+                i.ploce.Add(Vinyl);
              return Ok("Ploča je dodata!!!!!!!!!!!!!"); 
                 
             }
@@ -144,51 +161,6 @@ namespace wyyybbb.Controllers
         }
 
 
-        // [EnableCors("CORS")]
-        // [Route("DodatiVinyl")]
-        // [HttpPost]
-        // public async Task<ActionResult> DodajVinyl(string ime, Zanr zanr, int godinastampanja, string pesme) //prosledi se ceo student
-        // {
-        //     if (string.IsNullOrWhiteSpace(ime) || ime.Length > 50)//bar jedan karakter
-        //     {
-        //         return BadRequest("Pogrešno ime!");
-        //     }
-
-        //     if (godinastampanja < 1930 || godinastampanja > 2022)
-        //     {
-        //         return BadRequest("Uneti validnu godinu štampanja ploče!");
-        //     }
-
-
-        //     if (string.IsNullOrWhiteSpace(pesme))
-        //     {
-        //         return BadRequest("Niste uneli pesme!");
-        //     }
-
-        //     if (!Enum.IsDefined(typeof(Zanr), zanr))
-        //     {
-        //         return BadRequest("Uneti validan zanr ploče.");
-        //     }
-
-        //     try
-        //     {
-        //         var Vinyl=new Vinyl{
-        //         Ime=ime,
-        //         Zanr=zanr,
-        //         GodinaStampanja=godinastampanja,
-        //         Pesme=pesme
-        //         };
-        //         Context.Ploce.Add(Vinyl);
-        //         await Context.SaveChangesAsync();
-
-        //         return Ok($"Ploča je dodata sa ID: {Vinyl.ID}"); 
-                
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         return BadRequest(e.Message);
-        //     }
-        // }
 
         // [Route("Plocu_dodeli_+Prodavnicu_+Izvodjaca/{ime}/{zanr}/{godinastampanja}/{pesme}/{prodavnica}/{izvodjac}")]
         // [HttpPost]

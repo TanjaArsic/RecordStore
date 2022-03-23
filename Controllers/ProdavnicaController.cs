@@ -53,6 +53,9 @@ namespace wyyybbb.Controllers
         [HttpGet]
         public async Task<ActionResult> ProdavnicaiPloce(string idProdavnice) //dobaaaaaaaaaaaar
         {
+            if(idProdavnice==null){
+                return BadRequest("Prodavnica ne postoji");
+            }
             try
             {
                 var prod = await Context.Prodavnice
@@ -67,7 +70,9 @@ namespace wyyybbb.Controllers
                     Cena=q.Cena,
                     Kolicina=q.Kolicina,
                     Ploca=q.ploca,
-                    Izvodjac=q.ploca.izvodjac
+                    Izvodjac=q.ploca.izvodjac,
+                    Zanr=q.ploca.Zanr
+                    
 
                 }));
             }

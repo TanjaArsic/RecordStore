@@ -27,7 +27,7 @@ namespace Models
         public Zanr Zanr{ get; set; }
 
         public string Pesme { get; set; } // 1.Time 2.Money 
-         
+        [Range(1930,2022)]
         public int GodinaStampanja { get; set;  }
 
 

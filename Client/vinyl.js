@@ -13,6 +13,7 @@ export class Vinyl {
 
 
     }
+    
 
     crtajLabelu1(kontForma, unutrasnjiHTML) {
         let lab = document.createElement("label");
@@ -40,33 +41,22 @@ export class Vinyl {
         obrisibtn.onclick = ev => {
 
             this.deleteVinyl(this.id)
-            let parent = miniCont.parentNode;
-            parent.removeChild(miniCont);
-            console.log(this.id);
-
+            // let parent = miniCont.parentNode;
+            // parent.removeChild(miniCont);
 
         }
         miniCont.appendChild(obrisibtn);
-
-        // let izmenibtn=document.createElement("button");
-        // izmenibtn.classList="izmenibtn";
-        // izmenibtn.innerHTML="this.cena + "din;
-        // izmenibtn.onclick=ev=>{
-
-        //     if(this.deleteVinyl(this.id)){
-        //     let parent=miniCont.parentNode;
-        //     parent.removeChild(miniCont);
-        //     console.log(this.id);
-        //     }
-
-        // }
-        // miniCont.appendChild(izmenibtn);
 
         let d = this.crtajDiv1(miniCont);
         this.crtajLabelu1(d, this.ime + " [" + this.godinastampanja + "]");
 
         d = this.crtajDiv1(miniCont);
         this.crtajLabelu1(d, "-" + this.izvodjac.ime);
+
+        // d = this.crtajDiv1(miniCont);  radi zanrrrr
+        // this.crtajLabelu1(d, this.zanr);
+
+        console.log(this.zanr);
 
 
 
@@ -83,8 +73,8 @@ export class Vinyl {
         miniCont.addEventListener("click", popuni);
 
     }
-    vratiPesme() {
-        return this.pesme;
+    vratiID() {
+        return id;
     }
 
     deleteVinyl(id) {
@@ -96,17 +86,43 @@ export class Vinyl {
             return;
         }
 
+        if(this.kolicina>1){
+            this.kolicina=this.kolicina-1;
+            fetch("https://localhost:5001/Vinyl/SmanjiKolicinuPloce/" + this.ime + "/" + this.izvodjac,
+            {
+                method: "PUT",
+        
+            }).then(p => {
+                if(this.ime==null) alert("ime je null");
+                if(this.izvodjac==null) alert("izvodjac je null");
+                if (p.ok) {
+                alert("Uspesno promenjena kolicina!");  
+                }
+                else alert("Greska u promeni kolicine");
+            }) 
+            alert("Uspešno kupljena ploča! Preostala količina je " + this.kolicina);
+        }
+
+        else if(this.kolicina<1){
+            return alert ("WTF");
+        }
+        else{
+
         fetch("https://localhost:5001/Vinyl/ObrisiPlocu/" + id, {
             method: "DELETE",
         }).then(p => {
             if (p.ok) {
                 let kusur = pare - this.cena;
                 alert("Uspešno kupljena ploča! Kusur je " + kusur + " din.");
+                // let miniCont = this.kont.querySelector(".jedanvinyl");
+                // let parent = miniCont.parentNode;
+                // parent.removeChild(miniCont);
 
             }
         })
 
     }
+}
 
 
 }
